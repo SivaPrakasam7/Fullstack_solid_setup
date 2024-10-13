@@ -67,7 +67,6 @@ jobs:
           npm run migrate
 
       - name: Setup Backend
-        working-directory: packages/backend
         run: lerna run dev --stream --scope=frontend --scope=backend
 
       - name: Cypress run
