@@ -1,0 +1,7 @@
+{
+	"threshold": 2,
+	"languages": ["javascript", "typescript", "vue", "html", "css"],
+	"reporters": ["console"],
+	"absolute": true,
+	"gitignore": true
+}
