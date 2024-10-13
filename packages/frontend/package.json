@@ -2,6 +2,10 @@
     "name": "frontend",
     "private": true,
     "version": "0.0.0",
+    "engines": {
+        "npm": "10.7.0",
+        "node": "v20.14.0"
+    },
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc -b && vite build",

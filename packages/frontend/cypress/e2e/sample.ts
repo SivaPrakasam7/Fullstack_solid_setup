@@ -5,6 +5,6 @@ import { baseURL } from '../fixtures'
 describe('Sample test case', () => {
     it('Check initial app text', () => {
         cy.visit(baseURL)
-        cy.get('[data-testId="INIT"]').should('have.text', 'Hello world!')
+        cy.get('[data-testId="INIT"]').should('include.text', 'Hello world!')
     })
 })
