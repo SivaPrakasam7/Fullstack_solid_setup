@@ -1,0 +1,83 @@
+name: Code quality check and Cypress e2e test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [master]
+
+jobs:
+  code-quality-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.14.0'
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run JSCPD (Code Duplication Check)
+        run: npm run check-duplication > duplication-output.txt
+
+      - name: Upload Duplication Check Summary
+        if: failure()
+        run: |
+          echo "### Duplication Check Result" >> $GITHUB_STEP_SUMMARY
+          cat duplication-output.txt >> $GITHUB_STEP_SUMMARY
+
+  cypress-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.14.0'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Frontend
+        working-directory: packages/frontend
+        run: echo "${{ secrets.TEST_FRONTEND_ENV }}" > .env
+
+      - name: Setup Backend
+        working-directory: packages/backend
+        run: |
+          echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
+          npm run migrate
+
+      - name: Setup Backend
+        working-directory: packages/backend
+        run: lerna run dev --stream --scope=frontend --scope=backend
+
+      - name: Cypress run
+        working-directory: packages/client
+        run: npm run cy:chrome
+
+      - name: Archive production artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-results
+          path: |
+            packages/client/cypress/screenshots
