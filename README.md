@@ -1,4 +1,4 @@
-# Home Management
+# Fullstack solid setup
 
 # Project setup
 
