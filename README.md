@@ -2,7 +2,7 @@
 
 ## Project Setup
 
-This repository provides a **common project setup** for web apps using **Vue/React**, **Node.js**, and essential tools for frontend and backend development, testing, and automation.
+This repository provides a **common project setup** for web apps using **Vue**, **Node.js**, and essential tools for frontend and backend development, testing, and automation.
 
 ## Technologies
 
