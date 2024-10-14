@@ -54,7 +54,10 @@ This repository provides a **common project setup** for web apps using **Vue/Rea
 -   Run tests:
     ```bash
     lerna run test --stream --scope=backend
-    lerna run cy:chrome --stream --scope=frontend
+    lerna run cy:chrome --stream --scope=frontend -- --component
+
+    # Need to run the app before end to end test
+    lerna run cy:chrome --stream --scope=frontend -- --e2e
     ```
 
 ## Scripts

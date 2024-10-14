@@ -1,4 +1,4 @@
-const CACHE_NAME = 'home_management'
+const CACHE_NAME = 'app_name'
 
 self.addEventListener('install', (event) => {
     console.info('Service Worker installing.')

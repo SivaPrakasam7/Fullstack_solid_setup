@@ -11,7 +11,7 @@
         "build": "vue-tsc -b && vite build",
         "preview": "vite preview",
         "cy:open": "cypress open",
-        "cy:chrome": "cypress run --e2e --browser chrome"
+        "cy:chrome": "cypress run --browser chrome"
     },
     "dependencies": {
         "vue": "^3.5.10"
