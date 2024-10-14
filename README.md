@@ -21,7 +21,7 @@ This repository provides a **common project setup** for web apps using **Vue/Rea
 -   **ESLint**: Linter for identifying and fixing code quality issues.
 -   **JSCPD**: Tool for detecting duplicate code across the codebase.
 
--   **Cypress**: End-to-end testing framework for frontend applications.
+-   **Cypress**: Component and End-to-end testing framework for frontend applications.
 -   **Jest**: Used in backend services for unit and integration testing.
 
 -   **Vite Plugins**: Added for optimizing PWA features and removing unnecessary test case IDs in production builds.
