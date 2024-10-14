@@ -6,7 +6,7 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
 ## Technologies
 
--   **Vue/React**: Popular frontend frameworks for building user interfaces.
+-   **Vue**: Popular frontend framework for building user interfaces.
 -   **Vite**: Fast build tool for modern web development with support for hot module replacement.
 -   **TypeScript**: Superset of JavaScript providing static typing for better code quality.
 -   **Tailwind CSS**: Utility-first CSS framework for quickly styling components.
