@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from 'vue';
 
 export default {
     name: 'FileUpload',
@@ -158,52 +158,52 @@ export default {
             files: this.value,
             isDragging: false,
             localError: '',
-        }
+        };
     },
     watch: {
         value(propsValue) {
-            this.files = propsValue || []
+            this.files = propsValue || [];
         },
     },
     methods: {
         dragOver() {
-            this.isDragging = true
+            this.isDragging = true;
         },
         dragLeave() {
-            this.isDragging = false
+            this.isDragging = false;
         },
         onDrop(event: DragEvent) {
-            this.isDragging = false
+            this.isDragging = false;
             if (!this.disabled) {
-                event.preventDefault()
-                event.stopPropagation()
+                event.preventDefault();
+                event.stopPropagation();
                 this.loadFile({
                     target: { files: event.dataTransfer!.files },
-                } as unknown as Event)
+                } as unknown as Event);
             }
         },
         async loadFile(event: Event) {
-            this.files = []
-            this.localError = ''
-            const fileInput = event.target as unknown as { files: File[] }
+            this.files = [];
+            this.localError = '';
+            const fileInput = event.target as unknown as { files: File[] };
 
             if (fileInput.files && fileInput.files.length > 0) {
                 if (fileInput.files.length <= +this.max) {
                     for (const file of fileInput.files) {
                         const acceptFileRegex = new RegExp(
                             this.accept.replace(/,\s?/g, '|')
-                        )
+                        );
                         if (acceptFileRegex.test(file.type || '')) {
-                            this.files.push(file)
+                            this.files.push(file);
                             this.$emit('onchange', {
                                 name: this.name,
                                 value: this.files,
-                            })
+                            });
                         } else {
-                            this.localError = `${file.name} file format is invalid`
+                            this.localError = `${file.name} file format is invalid`;
                         }
                     }
-                } else this.localError = `Maximum allowed files : ${this.max}`
+                } else this.localError = `Maximum allowed files : ${this.max}`;
             }
         },
         getObjectURL(file: File | string) {
@@ -211,12 +211,12 @@ export default {
                 ? file
                 : file.type.includes('image')
                   ? URL.createObjectURL(file)
-                  : '/images/svg/file.svg'
+                  : '/images/svg/file.svg';
         },
         removeLocalImages(index: number) {
-            this.files = this.files.filter((_, i) => i !== index)
-            this.$emit('onchange', { name: this.name, value: this.files })
+            this.files = this.files.filter((_, i) => i !== index);
+            this.$emit('onchange', { name: this.name, value: this.files });
         },
     },
-}
+};
 </script>

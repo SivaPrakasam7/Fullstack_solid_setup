@@ -1,0 +1,10 @@
+{
+    "responses": {
+        "failedToCreateUser": "User creation failed",
+        "userNotFound": "User not found",
+        "noPasswordAuth": "Password authentication not supported",
+        "invalidCred": "Invalid credentials",
+        "unverifiedUser": "Account not verified",
+        "tokenNotFound": "Token not found"
+    }
+}
