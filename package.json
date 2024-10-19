@@ -13,7 +13,8 @@
         "lint:fix": "eslint --fix . --max-warnings=0",
         "format": "prettier --write .",
         "check-format": "prettier --check .",
-        "check-duplication": "jscpd --config jscpd.config.json --min-lines 20 --min-tokens 50 --ignore '**/*.json,**/.git/**,**/*.cy.ts,**/*.yml,**/*.d.ts,**/*.types.ts'"
+        "check-duplication": "jscpd --config jscpd.config.json --min-lines 20 --min-tokens 50 --ignore '**/*.json,**/.git/**,**/*.cy.ts,**/*.yml,**/*.d.ts,**/*.types.ts'",
+        "prepare": "husky"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.1.0",
@@ -25,11 +26,16 @@
         "eslint-plugin-prettier": "^5.2.1",
         "eslint-plugin-vue": "^9.29.0",
         "globals": "^15.11.0",
+        "husky": "^9.1.6",
         "jscpd": "^4.0.5",
         "lerna": "^8.1.2",
         "prettier": "^3.3.3",
         "supertest": "^7.0.0",
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.6.3"
+    },
+    "lint-staged": {
+        "!(**/cypress/**/*.ts)*.{ts,vue}": "npm run lint:fix",
+        "*.{ts,vue,css}": "npm run format"
     }
 }

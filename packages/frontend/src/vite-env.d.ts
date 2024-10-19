@@ -18,6 +18,7 @@ interface ImportMeta {
 declare module '*.vue'
 
 declare type ILargeRecord = any
+declare type ITimer = any
 
 //
 interface Window {

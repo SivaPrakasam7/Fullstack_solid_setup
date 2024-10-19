@@ -52,6 +52,7 @@ This repository provides a **common project setup** for web apps using **Vue**, 
     lerna run dev --stream --scope=frontend --scope=backend
     ```
 -   Run tests:
+
     ```bash
     lerna run test --stream --scope=backend
     lerna run cy:chrome --stream --scope=frontend -- --component
