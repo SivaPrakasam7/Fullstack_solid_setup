@@ -72,9 +72,6 @@ jobs:
                   echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
                   npm run migrate
 
-            - name: Setup Backend
-              run: lerna run dev --stream --scope=frontend --scope=backend
-
             - name: Cypress run
               working-directory: packages/backend
               run: npm run test > output.txt
@@ -102,7 +99,7 @@ jobs:
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:chrome --component
+              run: npm run cy:chrome -- --component
 
             - name: Archive production artifacts
               if: failure()
@@ -146,11 +143,11 @@ jobs:
                   npm run migrate
 
             - name: Setup Backend
-              run: lerna run dev --stream --scope=frontend --scope=backend
+              run: nohup lerna run dev --stream --scope=frontend --scope=backend &
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:chrome --e2e
+              run: npm run cy:chrome -- --e2e
 
             - name: Archive production artifacts
               if: failure()
