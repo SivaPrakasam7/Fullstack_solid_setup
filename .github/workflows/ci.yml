@@ -97,6 +97,10 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Setup Frontend
+              working-directory: packages/frontend
+              run: echo "${{ secrets.TEST_FRONTEND_ENV }}" > .env
+
             - name: Cypress run
               working-directory: packages/frontend
               run: npm run cy:chrome -- --component
@@ -142,8 +146,8 @@ jobs:
                   echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
                   npm run migrate
 
-            - name: Setup Backend
-              run: nohup lerna run dev --stream --scope=frontend --scope=backend &
+            - name: Run Services
+              run: nohup lerna run dev --stream --scope=frontend --scope=backend -- --mode test &
 
             - name: Cypress run
               working-directory: packages/frontend
