@@ -16,7 +16,8 @@ export const verifyToken: IVerifyToken = (req) => {
             {
                 ignoreExpiration: process.env.MODE === 'test',
             },
-            async (err: any, payload: any) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            async (err, payload: any) => {
                 if (err) throw err;
                 resolve(payload);
             }

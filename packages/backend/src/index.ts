@@ -8,8 +8,8 @@ dotenv.config();
 
 // Files imports here
 import { errorHandler } from 'src/handler/error';
-import sampleRoutes from 'src/routes/sample';
 import { logAccess } from 'src/handler/logger';
+import userRotes from 'src/routes/user';
 
 //
 const app = express();
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
     res.send('Hello, TypeScript with Express!');
 });
 
-app.use('/v1', sampleRoutes);
+app.use('/v1/user', userRotes);
 
 app.use(errorHandler);
 

@@ -2,6 +2,7 @@
     "responses": {
         "failedToCreateUser": "User creation failed",
         "userNotFound": "User not found",
+        "userAlreadyExist": "Email already exists",
         "noPasswordAuth": "Password authentication not supported",
         "invalidCred": "Invalid credentials",
         "unverifiedUser": "Account not verified",

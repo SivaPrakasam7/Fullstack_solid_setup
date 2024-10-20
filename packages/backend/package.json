@@ -24,7 +24,8 @@
         "firebase-admin": "^12.6.0",
         "helmet": "^8.0.0",
         "jsonwebtoken": "^9.0.2",
-        "mysql2": "^3.11.3"
+        "mysql2": "^3.11.3",
+        "yup": "^1.4.0"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",

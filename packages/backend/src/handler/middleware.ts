@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Request, Response } from 'express';
+import type { ObjectSchema } from 'yup';
 
 export type IErrorHandler = (
     error: IError,
@@ -21,5 +22,7 @@ export type IMiddleWare = (
     res: Response,
     next: IErrorCallback
 ) => void;
+
+export type IValidator = (validation: ObjectSchema<any>) => IMiddleWare;
 
 export type IService<T> = (data: Record<string, any>) => Promise<T>;
