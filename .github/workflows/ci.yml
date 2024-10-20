@@ -4,8 +4,11 @@ on:
     pull_request:
         types: [opened, synchronize, reopened]
         branches: [master]
+        paths: ['packages/frontend/**', 'packages/backend/**']
+
     push:
         branches: [master]
+        paths: ['packages/frontend/**', 'packages/backend/**']
 
 jobs:
     code-quality-check:
@@ -63,6 +66,14 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Cache npm dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
             - name: Install dependencies
               run: npm ci
 
@@ -93,6 +104,14 @@ jobs:
 
             - name: Checkout
               uses: actions/checkout@v4
+
+            - name: Cache npm dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: Install dependencies
               run: npm ci
@@ -132,6 +151,14 @@ jobs:
 
             - name: Checkout
               uses: actions/checkout@v4
+
+            - name: Cache npm dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: Install dependencies
               run: npm ci
