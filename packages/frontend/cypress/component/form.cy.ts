@@ -1,4 +1,4 @@
-import Main from 'src/app/components/form/main.vue'
+import Main from 'src/app/components/form/main.vue';
 
 describe('<Main />', () => {
     it('renders', () => {
@@ -25,6 +25,6 @@ describe('<Main />', () => {
                 },
                 buttonText: 'Login',
             },
-        })
-    })
-})
+        });
+    });
+});

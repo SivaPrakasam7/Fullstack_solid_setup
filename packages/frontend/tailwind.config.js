@@ -1082,4 +1082,4 @@ module.exports = {
         },
     },
     plugins: [],
-}
+};

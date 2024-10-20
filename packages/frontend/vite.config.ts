@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
-import vue from '@vitejs/plugin-vue'
-import removeAttribute from 'remove-attr'
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
+import vue from '@vitejs/plugin-vue';
+import removeAttribute from 'remove-attr';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => {
                 output: {
                     manualChunks: (id) => {
                         if (id.includes('node_modules')) {
-                            return id.split(/\/node_modules\/([\w-]+)\//gm)[1]
+                            return id.split(/\/node_modules\/([\w-]+)\//gm)[1];
                         }
                     },
                     entryFileNames: 'assets/[name].[hash].js',
@@ -83,5 +83,5 @@ export default defineConfig(({ mode }) => {
                 },
             },
         },
-    }
-})
+    };
+});

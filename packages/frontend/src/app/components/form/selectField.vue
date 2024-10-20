@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from 'vue';
 
 export default {
     name: 'SelectField',
@@ -119,15 +119,15 @@ export default {
     data() {
         return {
             handleInput: this.value,
-        }
+        };
     },
     watch: {
         handleInput(value) {
-            this.$emit('onchange', { name: this.name, value })
+            this.$emit('onchange', { name: this.name, value });
         },
         value(propsValue) {
-            this.handleInput = propsValue
+            this.handleInput = propsValue;
         },
     },
-}
+};
 </script>

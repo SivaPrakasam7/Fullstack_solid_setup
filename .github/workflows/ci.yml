@@ -43,8 +43,85 @@ jobs:
                   echo "### Duplication Check Result" >> $GITHUB_STEP_SUMMARY
                   cat duplication-output.txt >> $GITHUB_STEP_SUMMARY
 
-    cypress-test:
-        runs-on: self-hosted
+    backend-test:
+        runs-on: ubuntu-latest
+
+        services:
+            db:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+
+        steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.14.0'
+
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Setup Backend
+              working-directory: packages/backend
+              run: |
+                  echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
+                  npm run migrate
+
+            - name: Setup Backend
+              run: lerna run dev --stream --scope=frontend --scope=backend
+
+            - name: Cypress run
+              working-directory: packages/backend
+              run: npm run test > output.txt
+
+            - name: Upload Check Summary
+              if: failure()
+              run: |
+                  echo "### Backend Test Result" >> $GITHUB_STEP_SUMMARY
+                  cat output.txt >> $GITHUB_STEP_SUMMARY
+
+    cypress-component-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.14.0'
+
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Cypress run
+              working-directory: packages/frontend
+              run: npm run cy:chrome --component
+
+            - name: Archive production artifacts
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: cypress-results
+                  path: |
+                      packages/frontend/cypress/screenshots
+
+    cypress-e2e-test:
+        runs-on: ubuntu-latest
+
+        services:
+            db:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
 
         steps:
             - name: Set up Node.js
@@ -72,8 +149,8 @@ jobs:
               run: lerna run dev --stream --scope=frontend --scope=backend
 
             - name: Cypress run
-              working-directory: packages/client
-              run: npm run cy:chrome
+              working-directory: packages/frontend
+              run: npm run cy:chrome --e2e
 
             - name: Archive production artifacts
               if: failure()
@@ -81,4 +158,4 @@ jobs:
               with:
                   name: cypress-results
                   path: |
-                      packages/client/cypress/screenshots
+                      packages/frontend/cypress/screenshots

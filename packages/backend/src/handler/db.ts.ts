@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mysql, { Pool, PoolOptions } from 'mysql2/promise'
+import mysql, { Pool, PoolOptions } from 'mysql2/promise';
 
 export class MYSQLConnection {
-    private static pool: Pool
-    private static logspool: Pool
+    private static pool: Pool;
+    private static logspool: Pool;
     private constructor() {}
 
     static configurePool(): Pool {
@@ -18,13 +18,13 @@ export class MYSQLConnection {
                 debug: false,
                 multipleStatements: false,
                 charset: 'utf8mb4',
-            }
-            MYSQLConnection.pool = mysql.createPool(poolOptions)
+            };
+            MYSQLConnection.pool = mysql.createPool(poolOptions);
 
-            console.log('MySQL pool connection configured.')
+            console.log('MySQL pool connection configured.');
         }
 
-        return MYSQLConnection.pool
+        return MYSQLConnection.pool;
     }
 
     static configureLogsPool(): Pool {
@@ -39,23 +39,23 @@ export class MYSQLConnection {
                 debug: false,
                 multipleStatements: false,
                 charset: 'utf8mb4',
-            }
-            MYSQLConnection.logspool = mysql.createPool(poolOptions)
+            };
+            MYSQLConnection.logspool = mysql.createPool(poolOptions);
 
-            console.log('MySQL Logs pool connection configured.')
+            console.log('MySQL Logs pool connection configured.');
         }
 
-        return MYSQLConnection.logspool
+        return MYSQLConnection.logspool;
     }
 
     static closePool() {
         if (MYSQLConnection.pool) {
-            MYSQLConnection.pool.end()
-            console.log('MySQL pool connection closed.')
+            MYSQLConnection.pool.end();
+            console.log('MySQL pool connection closed.');
         }
         if (MYSQLConnection.logspool) {
-            MYSQLConnection.logspool.end()
-            console.log('MySQL pool connection closed.')
+            MYSQLConnection.logspool.end();
+            console.log('MySQL pool connection closed.');
         }
     }
 }
@@ -64,18 +64,18 @@ export const executeQuery: IQuery = async (
     query: string,
     values?: any
 ): Promise<any> => {
-    const pool = MYSQLConnection.configurePool()
-    const [results] = await pool.query(query, values)
-    return results
-}
+    const pool = MYSQLConnection.configurePool();
+    const [results] = await pool.query(query, values);
+    return results;
+};
 
 export const executeLogsQuery: IQuery = async (
     query: string,
     values?: any
 ): Promise<any> => {
-    const pool = MYSQLConnection.configureLogsPool()
-    const [results] = await pool.query(query, values)
-    return results
-}
+    const pool = MYSQLConnection.configureLogsPool();
+    const [results] = await pool.query(query, values);
+    return results;
+};
 
-export type IQuery = (query: string, values?: any) => Promise<any>
+export type IQuery = (query: string, values?: any) => Promise<any>;

@@ -110,12 +110,12 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
+import { PropType } from 'vue';
 
 //
-import FileUpload from './fileUpload.vue'
-import SelectField from './selectField.vue'
-import TextField from './textField.vue'
+import FileUpload from './fileUpload.vue';
+import SelectField from './selectField.vue';
+import TextField from './textField.vue';
 
 //
 export default {
@@ -146,21 +146,21 @@ export default {
             data: {} as Record<string, IFormField>,
             loading: false,
             debounceTimer: 0 as ITimer,
-        }
+        };
     },
     mounted() {
-        this.data = this.form
+        this.data = this.form;
     },
     methods: {
         getPayload() {
-            const payload: Record<string, ILargeRecord> = {}
+            const payload: Record<string, ILargeRecord> = {};
             for (const key in this.data) {
                 payload[key] =
                     this.data[key].type === 'tag'
                         ? this.getTagValues(this.data[key].value)
-                        : this.data[key].value
+                        : this.data[key].value;
             }
-            return payload
+            return payload;
         },
         getTagValues(v: string) {
             return [
@@ -169,24 +169,24 @@ export default {
                         .split(/( |;|,)/g)
                         .filter((t) => !!t.replaceAll(/(\s|;|,)/g, '').trim())
                 ),
-            ]
+            ];
         },
         onFieldChange(field: IFieldChange) {
             this.data[field.name] = {
                 ...this.data[field.name],
                 value: field.value,
-            }
+            };
 
-            if (this.debounceTimer) clearTimeout(this.debounceTimer)
+            if (this.debounceTimer) clearTimeout(this.debounceTimer);
 
             this.debounceTimer = setTimeout(() => {
-                const fieldData = this.data[field.name]
-                this.validateField(field.name, fieldData)
-            }, 500)
+                const fieldData = this.data[field.name];
+                this.validateField(field.name, fieldData);
+            }, 500);
         },
         async validateField(name: string, fieldData: IFormField) {
-            let errorMessage = ''
-            const value = fieldData.value || ''
+            let errorMessage = '';
+            const value = fieldData.value || '';
 
             if (
                 fieldData.required &&
@@ -202,11 +202,11 @@ export default {
             ) {
                 errorMessage =
                     fieldData.requiredLabel ||
-                    `${fieldData.label || 'field'} is required`
+                    `${fieldData.label || 'field'} is required`;
             } else if (value && fieldData.validations) {
                 for (const key in fieldData.validations) {
-                    const validation = fieldData.validations[key]
-                    const regex = new RegExp(validation.validate as string)
+                    const validation = fieldData.validations[key];
+                    const regex = new RegExp(validation.validate as string);
                     if (
                         (validation.type === 'regex' &&
                             typeof value === 'object' &&
@@ -216,52 +216,52 @@ export default {
                             ? value.split(/( |;|,)/g).filter((t: string) => {
                                   const data = t
                                       .replaceAll(/(\s|;|,)/g, '')
-                                      .trim()
-                                  if (data) return !regex.test(data)
-                                  return false
+                                      .trim();
+                                  if (data) return !regex.test(data);
+                                  return false;
                               }).length
                             : !regex.test(value))
                     ) {
-                        errorMessage = validation.message || 'Invalid value'
+                        errorMessage = validation.message || 'Invalid value';
                     } else if (validation.type === 'function') {
                         const call = validation.validate as (
                             values: ILargeRecord
-                        ) => Promise<string> | string
-                        errorMessage = await call(value)
+                        ) => Promise<string> | string;
+                        errorMessage = await call(value);
                     }
-                    if (errorMessage) break
+                    if (errorMessage) break;
                 }
             }
-            this.data[name].error = errorMessage
+            this.data[name].error = errorMessage;
         },
 
         async validate() {
             Object.keys(this.data).forEach((field) => {
-                this.validateField(field, this.data[field])
-            })
+                this.validateField(field, this.data[field]);
+            });
             return !Object.values(this.data).filter((f) => Boolean(f.error))
-                .length
+                .length;
         },
 
         async onSubmit() {
-            this.loading = true
-            if (await this.validate()) await this.call()
-            this.loading = false
+            this.loading = true;
+            if (await this.validate()) await this.call();
+            this.loading = false;
         },
     },
-}
+};
 
 export interface IFormField {
-    label: string
-    value?: ILargeRecord
-    error?: string
+    label: string;
+    value?: ILargeRecord;
+    error?: string;
     validations?: {
-        type: 'regex' | 'function'
-        message: string
-        validate: string | ((values: ILargeRecord) => Promise<string> | string)
-    }[]
-    required?: boolean
-    requiredLabel?: string
+        type: 'regex' | 'function';
+        message: string;
+        validate: string | ((values: ILargeRecord) => Promise<string> | string);
+    }[];
+    required?: boolean;
+    requiredLabel?: string;
     type?:
         | 'text'
         | 'textarea'
@@ -271,32 +271,32 @@ export interface IFormField {
         | 'time'
         | 'datetime-local'
         | 'file'
-        | 'tag'
-    placeHolder?: string
-    rows?: string
-    alignClass?: string
-    class?: string
-    layoutClass?: string
-    imageSize?: string
-    size?: string
-    disabled?: boolean
-    multiple?: boolean
-    min?: string
-    max?: string
-    accept?: string
-    format?: string
-    options?: string[]
-    buttonText?: string
-    buttonSize?: string
-    ref?: string
-    initialFieldCount?: number
-    remove?: (_index: string) => void
+        | 'tag';
+    placeHolder?: string;
+    rows?: string;
+    alignClass?: string;
+    class?: string;
+    layoutClass?: string;
+    imageSize?: string;
+    size?: string;
+    disabled?: boolean;
+    multiple?: boolean;
+    min?: string;
+    max?: string;
+    accept?: string;
+    format?: string;
+    options?: string[];
+    buttonText?: string;
+    buttonSize?: string;
+    ref?: string;
+    initialFieldCount?: number;
+    remove?: (_index: string) => void;
 }
 
 export type IFieldChange = {
-    name: string
-    value: ILargeRecord
-    ignoreValidation?: boolean
-    ref?: string
-}
+    name: string;
+    value: ILargeRecord;
+    ignoreValidation?: boolean;
+    ref?: string;
+};
 </script>

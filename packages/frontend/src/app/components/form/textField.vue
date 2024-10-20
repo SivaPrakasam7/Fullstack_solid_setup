@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from 'vue';
 
 export default {
     name: 'TextField',
@@ -164,46 +164,46 @@ export default {
             handleInput: this.value,
             show:
                 ['date', 'datetime-local', 'time'].includes(this.type) || false,
-        }
+        };
     },
     watch: {
         handleInput(value) {
             this.$emit('onchange', {
                 name: this.name,
                 value,
-            })
+            });
         },
         value(propsValue) {
-            this.handleInput = propsValue
+            this.handleInput = propsValue;
         },
     },
     methods: {
         toggle() {
-            this.show = !this.show
+            this.show = !this.show;
         },
         limitInput(event: Event) {
-            const target = event.target as HTMLInputElement
+            const target = event.target as HTMLInputElement;
             if (this.type === 'number' && target.value.length >= 19) {
-                target.value = target.value.slice(0, 19)
-                this.handleInput = target.value
+                target.value = target.value.slice(0, 19);
+                this.handleInput = target.value;
             }
         },
         filterNumericInput(event: KeyboardEvent) {
             if (this.type === 'number') {
-                const char = String.fromCharCode(event.keyCode)
+                const char = String.fromCharCode(event.keyCode);
                 if (
                     !/[0-9]/.test(char) &&
                     ![8, 9, 13, 37, 39].includes(event.keyCode)
                 ) {
-                    event.preventDefault()
+                    event.preventDefault();
                 }
             }
         },
         filterPaste(event: ClipboardEvent) {
             if (this.type === 'number') {
-                const pasteData = event.clipboardData?.getData('text')
+                const pasteData = event.clipboardData?.getData('text');
                 if (pasteData && !/^\d+$/.test(pasteData)) {
-                    event.preventDefault()
+                    event.preventDefault();
                 }
             }
         },
@@ -214,18 +214,18 @@ export default {
                         .split(/( |;|,)/g)
                         .filter((t) => !!t.replaceAll(/(\s|;|,)/g, '').trim())
                 ),
-            ]
+            ];
         },
         focus() {
             if (['date', 'datetime-local', 'time'].includes(this.type))
-                this.show = false
+                this.show = false;
         },
         blur() {
             if (['date', 'datetime-local', 'time'].includes(this.type))
-                this.show = true
+                this.show = true;
         },
     },
-}
+};
 
 export type IFieldType =
     | 'text'
@@ -235,5 +235,5 @@ export type IFieldType =
     | 'time'
     | 'datetime-local'
     | 'password'
-    | 'tag'
+    | 'tag';
 </script>

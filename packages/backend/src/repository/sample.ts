@@ -1,9 +1,9 @@
-import { executeQuery } from 'src/handler/db.ts'
+import { executeQuery } from 'src/handler/db.ts';
 
 export const sampleRepo = async () => {
-    const query = `SELECT * FROM sample_table`
+    const query = `SELECT * FROM sample_table`;
 
-    const queryResponse = executeQuery(query)
+    const queryResponse = executeQuery(query);
 
-    return queryResponse
-}
+    return queryResponse;
+};
