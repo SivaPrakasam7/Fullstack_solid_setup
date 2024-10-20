@@ -26,9 +26,6 @@ export default [
         'prettier'
     ),
     {
-        env: {
-            jest: true,
-        },
         plugins: {
             prettier,
             '@typescript-eslint': typescriptEslint,
@@ -37,6 +34,13 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.node,
+                ...globals.jest,
+                ...globals.browser,
+                ...globals.es2024,
+                ILargeRecord: true,
+                ITimer: true,
+                Cypress: true,
+                cy: true,
             },
 
             parser: parser,

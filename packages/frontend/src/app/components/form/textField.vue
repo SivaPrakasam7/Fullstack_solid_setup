@@ -208,17 +208,13 @@ export default {
             }
         },
         getTagValues(v: string) {
-            return (
-                [
-                    ...new Set(
-                        v
-                            .split(/( |;|,)/g)
-                            .filter(
-                                (t) => !!t.replaceAll(/(\s|;|,)/g, '').trim()
-                            )
-                    ),
-                ] || []
-            );
+            return [
+                ...new Set(
+                    v
+                        .split(/( |;|,)/g)
+                        .filter((t) => !!t.replaceAll(/(\s|;|,)/g, '').trim())
+                ),
+            ];
         },
         focus() {
             if (['date', 'datetime-local', 'time'].includes(this.type))

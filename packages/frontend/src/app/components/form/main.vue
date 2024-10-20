@@ -145,7 +145,7 @@ export default {
         return {
             data: {} as Record<string, IFormField>,
             loading: false,
-            debounceTimer: 0,
+            debounceTimer: 0 as ITimer,
         };
     },
     mounted() {
@@ -163,17 +163,13 @@ export default {
             return payload;
         },
         getTagValues(v: string) {
-            return (
-                [
-                    ...new Set(
-                        v
-                            .split(/( |;|,)/g)
-                            .filter(
-                                (t) => !!t.replaceAll(/(\s|;|,)/g, '').trim()
-                            )
-                    ),
-                ] || []
-            );
+            return [
+                ...new Set(
+                    v
+                        .split(/( |;|,)/g)
+                        .filter((t) => !!t.replaceAll(/(\s|;|,)/g, '').trim())
+                ),
+            ];
         },
         onFieldChange(field: IFieldChange) {
             this.data[field.name] = {
