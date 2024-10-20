@@ -4,11 +4,11 @@ on:
     pull_request:
         types: [opened, synchronize, reopened]
         branches: [master]
-        # paths: ['packages/frontend/**', 'packages/backend/**']
+        paths: ['packages/frontend/**', 'packages/backend/**']
 
     push:
         branches: [master]
-        # paths: ['packages/frontend/**', 'packages/backend/**']
+        paths: ['packages/frontend/**', 'packages/backend/**']
 
 jobs:
     code-quality-check:
