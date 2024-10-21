@@ -83,7 +83,7 @@ jobs:
                   echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
                   npm run migrate
 
-            - name: Cypress run
+            - name: Run jest
               working-directory: packages/backend
               run: npm run test > output.txt
 
