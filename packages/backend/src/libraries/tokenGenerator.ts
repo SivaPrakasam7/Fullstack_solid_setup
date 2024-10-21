@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
+import { createError } from 'src/handler/error';
 
 //
 import messages from 'src/utils/messages.json';
@@ -8,7 +9,8 @@ import messages from 'src/utils/messages.json';
 export const verifyToken: IVerifyToken = (req) => {
     return new Promise((resolve) => {
         const requestToken = req.headers.authorization?.split(' ')?.[1];
-        if (!requestToken) throw new Error(messages.responses.tokenNotFound);
+        if (!requestToken)
+            throw createError(400, messages.responses.tokenNotFound);
 
         jwt.verify(
             requestToken,

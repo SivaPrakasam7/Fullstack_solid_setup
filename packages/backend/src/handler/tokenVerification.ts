@@ -1,9 +1,10 @@
 import { IMiddleWare } from 'src/handler/middleware';
-import { getAuth } from 'src/libraries/firebase';
+// import { getAuth } from 'src/libraries/firebase';
 import { verifyToken } from 'src/libraries/tokenGenerator';
 
 //
-import messages from 'src/utils/messages.json';
+// import messages from 'src/utils/messages.json';
+// import { createError } from './error';
 
 //
 export const tokenChecker: IMiddleWare = async (req, _, next) => {
@@ -17,27 +18,27 @@ export const tokenChecker: IMiddleWare = async (req, _, next) => {
     next();
 };
 
-export const providerTokenChecker: IMiddleWare = async (req, _, next) => {
-    const requestToken = req.headers.authorization?.split(' ')?.[1];
+// export const providerTokenChecker: IMiddleWare = async (req, _, next) => {
+//     const requestToken = req.headers.authorization?.split(' ')?.[1];
 
-    if (!requestToken) throw new Error(messages.responses.tokenNotFound);
+//     if (!requestToken) throw createError(400, messages.responses.tokenNotFound);
 
-    await getAuth()
-        .verifyIdToken(requestToken)
-        .then((decodedToken) => {
-            const providerId = decodedToken.uid;
-            const name = decodedToken.name;
-            const email = decodedToken.email;
+//     await getAuth()
+//         .verifyIdToken(requestToken)
+//         .then((decodedToken) => {
+//             const providerId = decodedToken.uid;
+//             const name = decodedToken.name;
+//             const email = decodedToken.email;
 
-            req.body = {
-                ...{
-                    providerId,
-                    name,
-                    email,
-                },
-                ...req.body,
-            };
+//             req.body = {
+//                 ...{
+//                     providerId,
+//                     name,
+//                     email,
+//                 },
+//                 ...req.body,
+//             };
 
-            next();
-        });
-};
+//             next();
+//         });
+// };

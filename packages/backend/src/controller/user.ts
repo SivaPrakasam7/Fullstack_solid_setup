@@ -5,6 +5,7 @@ import {
     forgotPasswordService,
     getUserService,
     loginService,
+    requestVerificationService,
     verificationService,
 } from 'src/services/user';
 
@@ -41,12 +42,23 @@ export const userController: IMiddleWare = async (req, res, next) => {
     }
 };
 
+export const requestVerifyController: IMiddleWare = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const result = await requestVerificationService(data);
+
+        res.status(200).json({ data: result });
+    } catch (e) {
+        next(e as IError);
+    }
+};
+
 export const verifyController: IMiddleWare = async (req, res, next) => {
     try {
         const data = req.body;
         const result = await verificationService(data);
 
-        res.status(200).json({ data: result });
+        res.status(200).json({ message: result });
     } catch (e) {
         next(e as IError);
     }
@@ -57,7 +69,7 @@ export const forgotPasswordController: IMiddleWare = async (req, res, next) => {
         const data = req.body;
         const result = await forgotPasswordService(data);
 
-        res.status(200).json({ data: result });
+        res.status(200).json({ message: result });
     } catch (e) {
         next(e as IError);
     }
@@ -68,7 +80,7 @@ export const changePasswordController: IMiddleWare = async (req, res, next) => {
         const data = req.body;
         const result = await changePasswordService(data);
 
-        res.status(200).json({ data: result });
+        res.status(200).json({ message: result });
     } catch (e) {
         next(e as IError);
     }

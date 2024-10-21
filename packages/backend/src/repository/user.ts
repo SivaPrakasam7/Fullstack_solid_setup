@@ -55,7 +55,7 @@ export const checkUserVerifiedRepo = async (source: string) => {
 };
 
 export const getUserByIdRepo = async (userId: string) => {
-    const query = `SELECT * FROM users WHERE userId=?`;
+    const query = `SELECT * FROM users WHERE userId=? AND isDeleted=0`;
 
     const queryResponse = await executeQuery(query, [userId]);
 

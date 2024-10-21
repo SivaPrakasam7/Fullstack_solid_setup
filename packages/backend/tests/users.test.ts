@@ -8,7 +8,9 @@ describe('Users API', () => {
 
     beforeAll(async () => {
         executeQuery('DELETE FROM users');
+        executeQuery('DELETE FROM verifications');
         executeQuery('ALTER TABLE users AUTO_INCREMENT = 1');
+        executeQuery('ALTER TABLE verifications AUTO_INCREMENT = 1');
     });
 
     afterAll(async () => {
@@ -85,8 +87,51 @@ describe('Users API', () => {
         expect(response.body.message).toEqual('Account not verified');
 
         // After email verification
-        // response = await request(app).post('/v1/user/login').send(payload);
+        response = await request(app)
+            .get('/v1/user/verify')
+            .set('Authorization', `Bearer ${user.verificationToken}`)
+            .send();
+        expect(response.status).toBe(200);
+        expect(response.body.message).toEqual('Account verified');
+
+        response = await request(app).post('/v1/user/login').send(payload);
+        expect(response.status).toBe(200);
+        expect(response.body.token).not.toBeNull();
+    });
+
+    it('Change password', async () => {
+        payload = {};
+        let response = await request(app)
+            .post('/v1/user/request-reset-password')
+            .send(payload);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toEqual('Email is required');
+
+        payload = {
+            email: user.email,
+        };
+        response = await request(app)
+            .post('/v1/user/request-reset-password')
+            .send(payload);
+        expect(response.status).toBe(200);
+        expect(response.body.message).toEqual('Mail sent successfully!');
+
+        payload = {};
+        response = await request(app)
+            .post('/v1/user/change-password')
+            .set('Authorization', `Bearer ${user.verificationToken}`)
+            .send(payload);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toEqual('Password is required');
+
+        // payload = {
+        //     password: user.password,
+        // };
+        // response = await request(app)
+        //     .post('/v1/user/change-password')
+        //     .set('Authorization', `Bearer ${user.verificationToken}`)
+        //     .send(payload);
         // expect(response.status).toBe(200);
-        // expect(response.body.token).not.toBeNull();
+        // expect(response.body.message).toEqual('Password changed successfully');
     });
 });

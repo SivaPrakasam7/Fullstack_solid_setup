@@ -5,8 +5,10 @@ import {
     forgotPasswordController,
     loginController,
     userController,
+    requestVerifyController,
     verifyController,
 } from 'src/controller/user';
+import { tokenChecker } from 'src/handler/tokenVerification';
 import { validator } from 'src/handler/validator';
 import {
     createUserValidation,
@@ -23,12 +25,17 @@ router
 router.route('/login').post(validator(loginValidation), loginController);
 router.route('/profile').post(userController);
 
-router.route('/verify').get(verifyController);
+router.route('/request-verification').get(requestVerifyController);
+router.route('/verify').get(tokenChecker, verifyController);
 router
     .route('/request-reset-password')
     .post(validator(forgotPasswordValidation), forgotPasswordController);
 router
     .route('/change-password')
-    .post(validator(resetPasswordValidation), changePasswordController);
+    .post(
+        tokenChecker,
+        validator(resetPasswordValidation),
+        changePasswordController
+    );
 
 export default router;

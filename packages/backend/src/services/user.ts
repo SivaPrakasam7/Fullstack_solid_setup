@@ -11,8 +11,10 @@ import {
     getUserByIdRepo,
     getUserBySourceRepo,
     updatePasswordRepo,
+    updateVerification,
 } from 'src/repository/user';
 import { generateSecretKey, generateUserId } from 'src/utils';
+import { sendMail } from 'src/utils/mail';
 
 //
 import messages from 'src/utils/messages.json';
@@ -46,10 +48,7 @@ export const createUserService: IService<string> = async (data) => {
 
     const token = await generateToken({ userId, secretKey });
 
-    await verificationService({
-        userId,
-        email: data.email,
-    });
+    await requestVerificationService(userId);
 
     return token;
 };
@@ -89,14 +88,38 @@ export const getUserService: IService<Record<string, string>> = async (
     return userDetail;
 };
 
+export const requestVerificationService = async (userId: string) => {
+    const user = await getUserByIdRepo(userId);
+
+    const verificationToken = await generateToken({
+        userId,
+        email: user.email,
+    });
+    const emailVerificationLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.VERIFICATION_URL}?token=${verificationToken}`;
+
+    await sendMail(
+        '../templates/verification.ejs',
+        {
+            title: 'Email verification',
+            name: user.name,
+            verificationLink: emailVerificationLink,
+        },
+        {
+            to: user.email,
+            subject: 'Welcome to Home management',
+        }
+    );
+
+    return messages.responses.mailSent;
+};
+
 export const verificationService = async (payload: {
     userId: string;
     email: string;
 }) => {
-    const verificationToken = await generateToken(payload);
-    const emailVerificationLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.VERIFICATION_URL}?token=${verificationToken}`;
+    await updateVerification(payload.email);
 
-    return emailVerificationLink;
+    return messages.responses.verified;
 };
 
 export const forgotPasswordService: IService<string> = async (data) => {
@@ -118,13 +141,24 @@ export const forgotPasswordService: IService<string> = async (data) => {
 
     const resetPasswordLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.RESET_PASSWORD_PATH}?token=${token}`;
 
-    return resetPasswordLink;
+    await sendMail(
+        '../templates/reset-password.ejs',
+        {
+            title: 'Reset your password',
+            name: user.name,
+            resetLink: resetPasswordLink,
+        },
+        {
+            to: user.email,
+            subject: 'Reset your password',
+        }
+    );
+
+    return messages.responses.mailSent;
 };
 
 export const changePasswordService: IService<string> = async (data) => {
-    const user = await getUserBySourceRepo({
-        email: data.email,
-    });
+    const user = await getUserByIdRepo(data.userId);
 
     if (!user) throw createError(400, messages.responses.userNotFound);
 
@@ -132,5 +166,8 @@ export const changePasswordService: IService<string> = async (data) => {
 
     const result = await updatePasswordRepo(user.email, passwordHash);
 
-    return result;
+    if (!result)
+        throw createError(400, messages.responses.passwordChangeFailed);
+
+    return messages.responses.passwordChanged;
 };
