@@ -1,4 +1,5 @@
 import request from 'supertest';
+import nodemailerMock from 'nodemailer-mock';
 import app from 'src';
 import { executeQuery, MYSQLConnection } from 'src/handler/db.ts';
 import { user } from './data';
@@ -7,6 +8,7 @@ describe('Users API', () => {
     let payload = {};
 
     beforeAll(async () => {
+        nodemailerMock.mock.reset();
         executeQuery('DELETE FROM users');
         executeQuery('DELETE FROM verifications');
         executeQuery('ALTER TABLE users AUTO_INCREMENT = 1');
@@ -87,9 +89,15 @@ describe('Users API', () => {
         expect(response.body.message).toEqual('Account not verified');
 
         // After email verification
+        const sentEmails = nodemailerMock.mock.getSentMail();
+        const verificationEmail = sentEmails[0];
+        const verificationToken = (verificationEmail.html as string)!.match(
+            /verify\?token=(\w+\.\w+\.\w+)/
+        )![1];
+
         response = await request(app)
             .get('/v1/user/verify')
-            .set('Authorization', `Bearer ${user.verificationToken}`)
+            .set('Authorization', `Bearer ${verificationToken}`)
             .send();
         expect(response.status).toBe(200);
         expect(response.body.message).toEqual('Account verified');
@@ -99,7 +107,7 @@ describe('Users API', () => {
         expect(response.body.token).not.toBeNull();
     });
 
-    it('Change password', async () => {
+    it('Forgot and Change password', async () => {
         payload = {};
         let response = await request(app)
             .post('/v1/user/request-reset-password')
@@ -116,22 +124,68 @@ describe('Users API', () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toEqual('Mail sent successfully!');
 
+        const sentEmails = nodemailerMock.mock.getSentMail();
+        const resetLinkEmail = sentEmails[1];
+
+        const resetToken = (resetLinkEmail.html as string)!.match(
+            /reset-password\?token=(\w+\.\w+\.\w+)/
+        )![1];
+
         payload = {};
         response = await request(app)
             .post('/v1/user/change-password')
-            .set('Authorization', `Bearer ${user.verificationToken}`)
+            .set('Authorization', `Bearer ${resetToken}`)
             .send(payload);
         expect(response.status).toBe(400);
         expect(response.body.message).toEqual('Password is required');
 
-        // payload = {
-        //     password: user.password,
-        // };
-        // response = await request(app)
-        //     .post('/v1/user/change-password')
-        //     .set('Authorization', `Bearer ${user.verificationToken}`)
-        //     .send(payload);
-        // expect(response.status).toBe(200);
-        // expect(response.body.message).toEqual('Password changed successfully');
+        payload = {
+            password: user.password,
+        };
+        response = await request(app)
+            .post('/v1/user/change-password')
+            .set('Authorization', `Bearer ${resetToken}`)
+            .send(payload);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toEqual(
+            'New password cannot be the same as the old password'
+        );
+
+        payload = {
+            password: user.newPassword,
+        };
+        response = await request(app)
+            .post('/v1/user/change-password')
+            .set('Authorization', `Bearer ${resetToken}`)
+            .send(payload);
+        expect(response.status).toBe(200);
+        expect(response.body.message).toEqual('Password changed successfully');
+
+        payload = {
+            email: user.email,
+            password: user.password,
+        };
+        response = await request(app).post('/v1/user/login').send(payload);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toEqual('Invalid credentials');
+    });
+
+    it('Login and get profile', async () => {
+        payload = {
+            email: user.email,
+            password: user.newPassword,
+        };
+        let response = await request(app).post('/v1/user/login').send(payload);
+        expect(response.status).toBe(200);
+        expect(response.body.token).not.toBeNull();
+        const userToken = response.body.data.token;
+
+        response = await request(app)
+            .get('/v1/user/profile')
+            .set('Authorization', `Bearer ${userToken}`)
+            .send();
+        expect(response.status).toBe(200);
+        expect(response.body.data.user.userId).not.toBeNull();
+        expect(response.body.data.user.email).toEqual(user.email);
     });
 });

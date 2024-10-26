@@ -10,6 +10,7 @@
         "verified": "Account verified",
         "mailSent": "Mail sent successfully!",
         "passwordChanged": "Password changed successfully",
-        "passwordChangeFailed": "Password change failed"
+        "passwordChangeFailed": "Password change failed",
+        "previousPasswordError": "New password cannot be the same as the old password"
     }
 }

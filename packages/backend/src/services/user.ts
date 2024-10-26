@@ -84,7 +84,7 @@ export const loginService: IService<string> = async (data) => {
 export const getUserService: IService<Record<string, string>> = async (
     data
 ) => {
-    const userDetail = await getUserByIdRepo(data.id);
+    const userDetail = await getUserByIdRepo(data.userId);
     return userDetail;
 };
 
@@ -95,7 +95,7 @@ export const requestVerificationService = async (userId: string) => {
         userId,
         email: user.email,
     });
-    const emailVerificationLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.VERIFICATION_URL}?token=${verificationToken}`;
+    const emailVerificationLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.VERIFICATION_URL}${verificationToken}`;
 
     await sendMail(
         '../templates/verification.ejs',
@@ -139,7 +139,7 @@ export const forgotPasswordService: IService<string> = async (data) => {
         email: user.email,
     });
 
-    const resetPasswordLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.RESET_PASSWORD_PATH}?token=${token}`;
+    const resetPasswordLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.RESET_PASSWORD_URL}${token}`;
 
     await sendMail(
         '../templates/reset-password.ejs',
@@ -164,7 +164,15 @@ export const changePasswordService: IService<string> = async (data) => {
 
     const passwordHash = await generatePasswordHash(data.password);
 
-    const result = await updatePasswordRepo(user.email, passwordHash);
+    const isPasswordVerified = await verifyPassword(
+        data.password,
+        user.passwordHash
+    );
+
+    if (isPasswordVerified)
+        throw createError(400, messages.responses.previousPasswordError);
+
+    const result = await updatePasswordRepo(passwordHash, user.userId);
 
     if (!result)
         throw createError(400, messages.responses.passwordChangeFailed);

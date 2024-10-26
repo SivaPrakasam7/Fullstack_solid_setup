@@ -63,8 +63,8 @@ export const getUserByIdRepo = async (userId: string) => {
 };
 
 export const updatePasswordRepo = async (
-    userId: string,
-    passwordHash: string
+    passwordHash: string,
+    userId: string
 ) => {
     const query = `UPDATE users SET passwordHash=? WHERE userId=?`;
 

@@ -10,17 +10,12 @@ export const sendMail: ISendMail = async (templatePath, data, config) => {
     const template = await readFileData(templatePath);
     mailConfigurations.html = renderHTML(template, data);
 
-    if (process.env.MODE === 'test') {
-        return new Promise((resolve) =>
-            resolve({ accepted: [{ success: true }] })
-        );
-    } else
-        return new Promise((resolve) => {
-            transporter.sendMail(mailConfigurations, (error, data) => {
-                if (error) throw error;
-                resolve(data);
-            });
+    return new Promise((resolve) => {
+        transporter.sendMail(mailConfigurations, (error, data) => {
+            if (error) throw error;
+            resolve(data);
         });
+    });
 };
 
 export type ISendMail = (

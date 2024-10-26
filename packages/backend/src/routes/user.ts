@@ -23,7 +23,7 @@ router
     .route('/create')
     .post(validator(createUserValidation), createUserController);
 router.route('/login').post(validator(loginValidation), loginController);
-router.route('/profile').post(userController);
+router.route('/profile').get(tokenChecker, userController);
 
 router.route('/request-verification').get(requestVerifyController);
 router.route('/verify').get(tokenChecker, verifyController);
