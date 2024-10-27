@@ -20,7 +20,8 @@ export const verifyToken: IVerifyToken = (req) => {
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             async (err, payload: any) => {
-                if (err) throw err;
+                if (err)
+                    throw createError(400, messages.responses.tokenExpired);
                 resolve(payload);
             }
         );

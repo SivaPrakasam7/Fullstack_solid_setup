@@ -23,6 +23,7 @@
 <script lang="ts">
 //
 import { register } from 'src/repository/authentication';
+import { emailRegex, fullNameRegex, passwordRegex } from 'src/constants/regex';
 
 //
 import FormBuilder from 'src/app/components/form/main.vue';
@@ -42,6 +43,13 @@ export default {
                     required: true,
                     value: '',
                     requiredLabel: 'Please enter your name',
+                    validations: [
+                        {
+                            type: 'regex',
+                            validate: fullNameRegex,
+                            message: 'Invalid name',
+                        },
+                    ],
                 },
                 email: {
                     label: 'Email',
@@ -50,6 +58,13 @@ export default {
                     required: true,
                     value: '',
                     requiredLabel: 'Please enter your email',
+                    validations: [
+                        {
+                            type: 'regex',
+                            validate: emailRegex,
+                            message: 'Invalid email',
+                        },
+                    ],
                 },
                 password: {
                     label: 'Password',
@@ -57,7 +72,15 @@ export default {
                     type: 'password',
                     required: true,
                     value: '',
-                    requiredLabel: 'Password is required',
+                    requiredLabel: 'Please enter your password',
+                    validations: [
+                        {
+                            type: 'regex',
+                            validate: passwordRegex,
+                            message:
+                                'Password must contain at least one uppercase letter, one lower case, one number, one symbol(@$!%*?&#), and be at least 8 characters long',
+                        },
+                    ],
                 },
                 confirmPassword: {
                     label: 'Confirm Password',
@@ -65,14 +88,15 @@ export default {
                     type: 'password',
                     required: true,
                     value: '',
-                    requiredLabel: 'Confirmation password is required',
+                    requiredLabel: 'Please enter confirmation password',
                 },
             } as Record<string, ILargeRecord>,
         };
     },
     methods: {
         async call(payload: ILargeRecord) {
-            await register(payload);
+            const res = await register(payload);
+            return !res.error;
         },
     },
 };

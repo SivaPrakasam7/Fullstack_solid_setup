@@ -77,7 +77,7 @@
         <p
             :data-testId="`${name}-error`"
             :class="[
-                'mt-1 text-xs italic h-[5px]',
+                'mt-1 text-xs italic min-h-4',
                 error ? 'text-red-400' : 'text-gray-400',
             ]"
         >

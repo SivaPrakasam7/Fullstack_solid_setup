@@ -7,6 +7,7 @@
         "invalidCred": "Invalid credentials",
         "unverifiedUser": "Account not verified",
         "tokenNotFound": "Token not found",
+        "tokenExpired": "Token expired",
         "verified": "Account verified",
         "mailSent": "Mail sent successfully!",
         "passwordChanged": "Password changed successfully",

@@ -1,7 +1,7 @@
 <template>
     <div :class="['grid gap-2 p-2 w-full', layoutClass]">
         <div
-            v-for="[fieldName, field] in Object.entries(form || {}).filter(
+            v-for="[fieldName, field] in Object.entries(data || {}).filter(
                 ([_, field]) => !field.ref
             )"
             :key="fieldName"
@@ -124,7 +124,9 @@ export default {
         },
         call: {
             required: true,
-            type: Function as PropType<(...args: ILargeRecord) => void>,
+            type: Function as PropType<
+                (...args: ILargeRecord) => Promise<boolean>
+            >,
         },
         buttonText: {
             default: 'Submit',
@@ -142,12 +144,14 @@ export default {
     data() {
         return {
             data: {} as Record<string, IFormField>,
+            initialData: {} as Record<string, IFormField>,
             loading: false,
             debounceTimer: 0 as ITimer,
         };
     },
-    mounted() {
+    created() {
         this.data = this.form;
+        this.initialData = { ...this.data };
     },
     methods: {
         getPayload() {
@@ -232,7 +236,6 @@ export default {
             }
             this.data[name].error = errorMessage;
         },
-
         async validate() {
             Object.keys(this.data).forEach((field) => {
                 this.validateField(field, this.data[field]);
@@ -240,11 +243,13 @@ export default {
             return !Object.values(this.data).filter((f) => Boolean(f.error))
                 .length;
         },
-
         async onSubmit() {
             this.loading = true;
             const payload = this.getPayload();
-            if (await this.validate()) await this.call(payload);
+            if (await this.validate()) {
+                const success = await this.call(payload);
+                if (success) this.data = this.initialData;
+            }
             this.loading = false;
         },
     },

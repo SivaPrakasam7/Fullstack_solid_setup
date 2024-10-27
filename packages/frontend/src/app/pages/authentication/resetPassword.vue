@@ -17,6 +17,7 @@
 <script lang="ts">
 //
 import { requestResetPassword } from 'src/repository/authentication';
+import { passwordRegex } from 'src/constants/regex';
 
 //
 import FormBuilder from 'src/app/components/form/main.vue';
@@ -35,7 +36,15 @@ export default {
                     type: 'password',
                     required: true,
                     value: '',
-                    requiredLabel: 'Password is required',
+                    requiredLabel: 'Please enter your password',
+                    validations: [
+                        {
+                            type: 'regex',
+                            validate: passwordRegex,
+                            message:
+                                'Password must contain at least one uppercase letter, one lower case, one number, one symbol(@$!%*?&#), and be at least 8 characters long',
+                        },
+                    ],
                 },
                 confirmPassword: {
                     label: 'Re-Enter New Password',
@@ -43,14 +52,15 @@ export default {
                     type: 'password',
                     required: true,
                     value: '',
-                    requiredLabel: 'Confirmation password is required',
+                    requiredLabel: 'Please enter confirmation password',
                 },
             } as Record<string, ILargeRecord>,
         };
     },
     methods: {
         async call(payload: ILargeRecord) {
-            await requestResetPassword(payload);
+            const res = await requestResetPassword(payload);
+            return !res.error;
         },
     },
 };

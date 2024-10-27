@@ -11,7 +11,7 @@ export const Request = (
     options: Axios.AxiosRequestConfig,
     data?: object,
     headers?: Axios.RawAxiosRequestHeaders
-) => {
+): Promise<ILargeRecord & { error: boolean }> => {
     return client({
         ...options,
         headers: {

@@ -28,6 +28,7 @@
 <script lang="ts">
 //
 import { login } from 'src/repository/authentication';
+import { emailRegex } from 'src/constants/regex';
 
 //
 import FormBuilder from 'src/app/components/form/main.vue';
@@ -48,6 +49,13 @@ export default {
                     required: true,
                     value: '',
                     requiredLabel: 'Please enter your email',
+                    validations: [
+                        {
+                            type: 'regex',
+                            validate: emailRegex,
+                            message: 'Invalid email',
+                        },
+                    ],
                 },
                 password: {
                     label: 'Password',
@@ -55,14 +63,15 @@ export default {
                     type: 'password',
                     required: true,
                     value: '',
-                    requiredLabel: 'Password is required',
+                    requiredLabel: 'Please enter your password',
                 },
             } as Record<string, ILargeRecord>,
         };
     },
     methods: {
         async call(payload: ILargeRecord) {
-            await login(payload);
+            const res = await login(payload);
+            return !res.error;
         },
     },
 };
