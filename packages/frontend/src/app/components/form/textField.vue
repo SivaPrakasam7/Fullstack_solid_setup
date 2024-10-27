@@ -6,7 +6,7 @@
             >{{ label
             }}<span
                 v-show="label && required"
-                class="text-red-500 font-bold text-xs"
+                class="text-red-400 font-bold text-xs"
                 >*</span
             ><span class="text-xs">{{
                 type === 'tag'
@@ -16,7 +16,7 @@
         >
         <div
             :class="[
-                'flex text-md border border-gray-300 hover:border-gray-500 dark:border-gray-250 dark:hover:border-hoverBlue text-md w-full rounded-xl text-customText dark:text-white relative items-center gap-1',
+                'flex text-md border border-gray-300 hover:border-gray-500 text-md w-full rounded-xl relative items-center gap-1 transition-border duration-300',
                 layoutClass,
                 disabled ? 'bg-gray-200 text-gray-400 dark:text-gray-300' : '',
             ]"
@@ -61,20 +61,24 @@
                 oncontextmenu="return false;"
                 @click="toggle()"
             >
-                <i v-if="show" class="material-icons-rounded text-xl"
-                    >visibility</i
-                >
-                <i v-if="!show" class="material-icons-rounded text-xl"
-                    >visibility_off</i
-                >
+                <SvgIcon
+                    v-if="show"
+                    path="/icons/svg/visibility.svg"
+                    class="h-6 w-6"
+                ></SvgIcon>
+                <SvgIcon
+                    v-else
+                    path="/icons/svg/visibility_off.svg"
+                    class="h-6 w-6"
+                ></SvgIcon>
             </button>
             <slot name="endIcon" />
         </div>
         <p
             :data-testId="`${name}-error`"
             :class="[
-                'mt-1 text-xs italic',
-                error ? 'text-red-500' : 'text-gray-400',
+                'mt-1 text-xs italic h-[5px]',
+                error ? 'text-red-400' : 'text-gray-400',
             ]"
         >
             {{ error || helperText }}
@@ -93,9 +97,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import SvgIcon from '../svg.vue';
 
 export default {
     name: 'TextField',
+    components: { SvgIcon },
     props: {
         name: {
             required: true,

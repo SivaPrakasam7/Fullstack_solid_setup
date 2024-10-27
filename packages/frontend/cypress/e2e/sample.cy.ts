@@ -7,7 +7,7 @@ describe('Sample test case', () => {
         cy.visit(baseURL);
         cy.get('[data-testId="INIT"]').should(
             'include.text',
-            'Fullstack solid setup'
+            'Home management'
         );
     });
 });

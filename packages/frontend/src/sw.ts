@@ -1,4 +1,4 @@
-const CACHE_NAME = 'app_name';
+const CACHE_NAME = import.meta.env.VITE_APP_NAME;
 
 self.addEventListener('install', (event) => {
     console.info('Service Worker installing.');

@@ -14,7 +14,10 @@
         "cy:chrome": "cypress run --browser chrome"
     },
     "dependencies": {
-        "vue": "^3.5.10"
+        "vue": "^3.5.10",
+        "vue-router": "^4.4.5",
+        "vuex": "^4.1.0",
+        "vuex-persist": "^3.1.3"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^5.1.4",

@@ -106,7 +106,7 @@ export const requestVerificationService = async (userId: string) => {
         },
         {
             to: user.email,
-            subject: 'Welcome to Home management',
+            subject: `Welcome to ${process.env.APP_NAME}`,
         }
     );
 

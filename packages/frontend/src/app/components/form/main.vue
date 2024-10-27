@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-2 p-2">
+    <div :class="['grid gap-2 p-2 w-full', layoutClass]">
         <div
             v-for="[fieldName, field] in Object.entries(form || {}).filter(
                 ([_, field]) => !field.ref
@@ -78,11 +78,7 @@
             :disabled="loading"
             type="submit"
             data-testId="SUBMIT"
-            :class="[
-                'w-fit h-49 p-2.5 px-4 rounded-full font-bold border border-gray-300 hover:border-gray-400 bg-gradient-to-r from-opacity-50 to-opacity-18 hover:to-opacity-50 hover:from-opacity-18 flex flex-row items-center justify-center',
-                loading ? 'text-gray-400' : '',
-                buttonClass,
-            ]"
+            :class="['app-button', loading ? 'text-gray-400' : '', buttonClass]"
             oncontextmenu="return false;"
             @click="onSubmit"
         >
@@ -128,15 +124,17 @@ export default {
         },
         call: {
             required: true,
-            type: Function as PropType<
-                (...args: ILargeRecord) => Promise<ILargeRecord>
-            >,
+            type: Function as PropType<(...args: ILargeRecord) => void>,
         },
         buttonText: {
             default: 'Submit',
             type: String,
         },
         buttonClass: {
+            default: '',
+            type: String,
+        },
+        layoutClass: {
             default: '',
             type: String,
         },
@@ -245,7 +243,8 @@ export default {
 
         async onSubmit() {
             this.loading = true;
-            if (await this.validate()) await this.call();
+            const payload = this.getPayload();
+            if (await this.validate()) await this.call(payload);
             this.loading = false;
         },
     },

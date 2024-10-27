@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import vue from '@vitejs/plugin-vue';
 import removeAttribute from 'remove-attr';
+import { svgIconsPlugin } from './plugins/vite-svg-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -11,6 +12,7 @@ export default defineConfig(({ mode }) => {
         },
         plugins: [
             vue(),
+            svgIconsPlugin('./public/icons/svg'),
             mode !== 'test'
                 ? removeAttribute({
                       extensions: ['vue'],

@@ -4,7 +4,7 @@ import { renderHTML } from 'src/libraries/renderer';
 
 export const sendMail: ISendMail = async (templatePath, data, config) => {
     const mailConfigurations = {
-        from: 'Home management',
+        from: process.env.APP_NAME,
         ...config,
     };
     const template = await readFileData(templatePath);

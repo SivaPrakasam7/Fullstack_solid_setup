@@ -10,7 +10,7 @@
         >
         <div
             :class="[
-                'flex gap-2 text-md border border-gray-300 hover:border-gray-500 dark:border-gray-250 dark:hover:border-hoverBlue text-md w-full rounded-xl pr-2',
+                'flex gap-2 text-md border border-gray-300 hover:border-gray-500 text-md w-full rounded-xl pr-2 transition-border duration-300',
                 layoutClass,
             ]"
         >
@@ -21,7 +21,7 @@
                 :name="name"
                 :data-testId="name"
                 :class="[
-                    'w-full rounded-xl outline-none bg-white dark:bg-gray-550 text-customText dark:text-white',
+                    'w-full rounded-xl outline-none bg-white',
                     size || 'p-3 text-md',
                     disabled
                         ? 'bg-gray-200 text-gray-400 dark:text-gray-300'
