@@ -10,5 +10,4 @@ module.exports = {
     },
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
-    testTimeout: 50000,
 };

@@ -19,7 +19,7 @@ describe('Users API', () => {
         await MYSQLConnection.closePool();
     });
 
-    it('Create user', async () => {
+    test('Create user', async () => {
         let response = await request(app).post('/v1/user/create').send(payload);
         expect(response.status).toBe(400);
         expect(response.body.message).toEqual(
@@ -57,9 +57,9 @@ describe('Users API', () => {
         response = await request(app).post('/v1/user/create').send(payload);
         expect(response.status).toBe(200);
         expect(response.body.token).not.toBeNull();
-    });
+    }, 10000);
 
-    it('Login user', async () => {
+    test('Login user', async () => {
         payload = {};
         let response = await request(app).post('/v1/user/login').send(payload);
         expect(response.status).toBe(400);
@@ -105,9 +105,9 @@ describe('Users API', () => {
         response = await request(app).post('/v1/user/login').send(payload);
         expect(response.status).toBe(200);
         expect(response.body.token).not.toBeNull();
-    });
+    }, 10000);
 
-    it('Forgot and Change password', async () => {
+    test('Forgot and Change password', async () => {
         payload = {};
         let response = await request(app)
             .post('/v1/user/request-reset-password')
@@ -168,9 +168,9 @@ describe('Users API', () => {
         response = await request(app).post('/v1/user/login').send(payload);
         expect(response.status).toBe(400);
         expect(response.body.message).toEqual('Invalid credentials');
-    });
+    }, 10000);
 
-    it('Login and get profile', async () => {
+    test('Login and get profile', async () => {
         payload = {
             email: user.email,
             password: user.newPassword,
@@ -187,5 +187,5 @@ describe('Users API', () => {
         expect(response.status).toBe(200);
         expect(response.body.data.user.userId).not.toBeNull();
         expect(response.body.data.user.email).toEqual(user.email);
-    });
+    }, 10000);
 });
