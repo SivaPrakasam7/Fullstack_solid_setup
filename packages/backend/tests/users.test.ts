@@ -88,6 +88,7 @@ describe('Users API', () => {
         expect(response.body.message).toEqual('Account not verified');
 
         // After email verification
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const sentEmails = nodemailerMock.mock.getSentMail();
         const verificationEmail = sentEmails[0];
         const verificationToken = (verificationEmail.html as string)!.match(
@@ -124,6 +125,7 @@ describe('Users API', () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toEqual('Mail sent successfully!');
 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const sentEmails = nodemailerMock.mock.getSentMail();
         const resetLinkEmail = sentEmails[1];
 
