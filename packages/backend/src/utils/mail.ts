@@ -1,5 +1,5 @@
 import { readFileData } from 'src/libraries/fileSystem';
-import { transporter } from 'src/libraries/mail';
+import { testTransporter, transporter } from 'src/libraries/mail';
 import { renderHTML } from 'src/libraries/renderer';
 
 export const sendMail: ISendMail = async (templatePath, data, config) => {
@@ -10,8 +10,11 @@ export const sendMail: ISendMail = async (templatePath, data, config) => {
     const template = await readFileData(templatePath);
     mailConfigurations.html = renderHTML(template, data);
 
+    const _transporter =
+        process.env.MODE === 'test' ? await testTransporter : transporter;
+
     return new Promise((resolve) => {
-        transporter.sendMail(mailConfigurations, (error, data) => {
+        _transporter.sendMail(mailConfigurations, (error, data) => {
             if (error) throw error;
             resolve(data);
         });

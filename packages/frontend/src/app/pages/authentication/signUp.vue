@@ -8,7 +8,7 @@
                 :form="form"
                 :call="call"
                 button-text="Sign Up"
-                layout-class="gap-4 max-w-[400px] w-full"
+                layout-class="gap-1"
             />
             <div class="w-full border-t border-gray-600"></div>
             <a

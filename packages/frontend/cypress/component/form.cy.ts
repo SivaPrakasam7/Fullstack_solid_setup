@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 import Main from 'src/app/components/form/main.vue';
 
 describe('<Main />', () => {

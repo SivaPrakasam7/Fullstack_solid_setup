@@ -56,7 +56,6 @@ describe('Users API', () => {
         };
         response = await request(app).post('/v1/user/create').send(payload);
         expect(response.status).toBe(200);
-        expect(response.body.token).not.toBeNull();
     }, 10000);
 
     test('Login user', async () => {
@@ -104,7 +103,8 @@ describe('Users API', () => {
 
         response = await request(app).post('/v1/user/login').send(payload);
         expect(response.status).toBe(200);
-        expect(response.body.token).not.toBeNull();
+        expect(response.body.data.accessToken).not.toBeNull();
+        expect(response.body.data.refreshToken).not.toBeNull();
     }, 10000);
 
     test('Forgot and Change password', async () => {
@@ -177,12 +177,20 @@ describe('Users API', () => {
         };
         let response = await request(app).post('/v1/user/login').send(payload);
         expect(response.status).toBe(200);
-        expect(response.body.token).not.toBeNull();
-        const userToken = response.body.data.token;
+        expect(response.body.data.accessToken).not.toBeNull();
+        expect(response.body.data.refreshToken).not.toBeNull();
+        const accessToken = response.body.data.accessToken;
+        const refreshToken = response.body.data.refreshToken;
+
+        response = await request(app).get('/v1/user/profile').send();
+        expect(response.status).toBe(401);
+        expect(response.body.message).toEqual('Token not found');
+
+        const cookies = `accessToken=${accessToken};refreshToken=${refreshToken}`;
 
         response = await request(app)
             .get('/v1/user/profile')
-            .set('Authorization', `Bearer ${userToken}`)
+            .set('Cookie', cookies)
             .send();
         expect(response.status).toBe(200);
         expect(response.body.data.user.userId).not.toBeNull();

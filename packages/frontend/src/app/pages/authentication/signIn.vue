@@ -6,7 +6,7 @@
                 :form="form"
                 :call="call"
                 button-text="Sign In"
-                layout-class="gap-4"
+                layout-class="gap-1"
             />
             <div class="w-full border-t border-gray-600"></div>
             <div class="flex flex-row justify-between">
@@ -71,6 +71,7 @@ export default {
     methods: {
         async call(payload: ILargeRecord) {
             const res = await login(payload);
+            if (!res.error) this.$router.push({ name: 'main' });
             return !res.error;
         },
     },

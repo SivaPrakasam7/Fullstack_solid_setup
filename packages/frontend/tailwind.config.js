@@ -1085,7 +1085,7 @@ module.exports = {
         function ({ addUtilities }) {
             addUtilities({
                 '.app-button': {
-                    '@apply px-4 py-2 rounded-xl w-fit flex items-center border justify-center hover:bg-white hover:bg-opacity-10 transition-all duration-300':
+                    '@apply px-4 py-2 rounded-xl w-fit flex items-center border justify-center hover:bg-black hover:text-white hover:dark:bg-white hover:dark:text-black transition-all duration-300':
                         {},
                 },
             });

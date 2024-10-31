@@ -1,16 +1,20 @@
 import Vuex from 'vuex';
 
 //
+import { getUserDetail } from 'src/repository/authentication';
+
+//
 import type { IAppStoreProps, IStoreProps, IToast } from './index.types';
 
 //
 export const mutations: Vuex.MutationTree<IStoreProps> = {
     getProfile: async (state, callback?: () => void) => {
-        state.token = '';
+        state.user = await getUserDetail();
         callback?.();
     },
-    setToken: async (state, token: string) => {
+    setToken: async (state, token: string | null) => {
         state.token = token;
+        if (!token) state.user = null;
     },
 };
 

@@ -31,6 +31,18 @@ const router = createRouter({
                 import('src/app/pages/authentication/resetPassword.vue'),
         },
         {
+            path: '/verify',
+            name: 'verification',
+            component: () =>
+                import('src/app/pages/authentication/verification.vue'),
+            meta: {
+                defaultDomain: true,
+            },
+            props: {
+                content: 'Account verified',
+            },
+        },
+        {
             path: '/:pathMatch(.*)*',
             name: 'not-found',
             component: () => import('src/app/components/page.vue'),

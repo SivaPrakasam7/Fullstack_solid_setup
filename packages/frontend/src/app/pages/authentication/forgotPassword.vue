@@ -8,13 +8,13 @@
                 :form="form"
                 :call="call"
                 button-text="Request reset password link"
-                layout-class="gap-4 max-w-[400px] w-full"
+                layout-class="gap-1"
             />
             <div class="w-full border-t border-gray-600"></div>
             <a
                 href="/sign-in"
                 class="text-md underline text-gray-500 hover:text-current"
-                >Already have an account?</a
+                >Back to login</a
             >
         </div>
     </div>
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 //
-import { changePassword } from 'src/repository/authentication';
+import { requestResetPassword } from 'src/repository/authentication';
 import { emailRegex } from 'src/constants/regex';
 
 //
@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         async call(payload: ILargeRecord) {
-            const res = await changePassword(payload);
+            const res = await requestResetPassword(payload);
             return !res.error;
         },
     },

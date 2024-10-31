@@ -11,7 +11,7 @@ export const login = (payload: { email: string; password: string }) =>
     ).then(async (res) => {
         if (!res.error) {
             await store.commit('setToken', res.data.token);
-            await store.commit('getProfile', () => {});
+            await store.commit('getProfile');
         } else {
             appStore.commit('setToast', {
                 type: 'error',
@@ -55,17 +55,40 @@ export const requestResetPassword = (payload: { email: string }) =>
         return res;
     });
 
-export const changePassword = (payload: { password: string }) =>
+export const changePassword = (payload: { password: string }, token: string) =>
     Request(
         {
             method: 'post',
             url: `v1/user/change-password`,
         },
-        payload
+        payload,
+        {
+            Authorization: `Bearer ${token}`,
+        }
     ).then(async (res) => {
         appStore.commit('setToast', {
             type: res.error ? 'error' : 'success',
             message: res.message,
         });
         return res;
+    });
+
+export const verifyAccount = (token: string) =>
+    Request(
+        { method: 'get', url: `v1/user/verify` },
+        {},
+        {
+            Authorization: `Bearer ${token}`,
+        }
+    ).then((res) => (res.error ? res : res.data));
+
+export const getUserDetail = () =>
+    Request({ method: 'get', url: `v1/user/profile` }).then((res) =>
+        res.error ? res : res?.data?.user
+    );
+
+export const logout = () =>
+    Request({ method: 'get', url: `v1/user/logout` }).then((res) => {
+        store.commit('getProfile');
+        return res.error ? res : res?.data?.user;
     });

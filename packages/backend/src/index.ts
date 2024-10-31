@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -19,7 +20,8 @@ app.use(logAccess);
 
 app.use(bodyParser.json({ limit: '5MB' }));
 app.use(bodyParser.urlencoded({ limit: '5MB', extended: true }));
-app.use(cors({ origin: '*' }));
+app.use(cookieParser());
+app.use(cors({ origin: 'http://localhost:3008', credentials: true }));
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.xssFilter());

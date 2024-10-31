@@ -1,6 +1,7 @@
 {
     "responses": {
         "failedToCreateUser": "User creation failed",
+        "userCreated": "User creation successfully",
         "userNotFound": "User not found",
         "userAlreadyExist": "Email already exists",
         "noPasswordAuth": "Password authentication not supported",
@@ -12,6 +13,7 @@
         "mailSent": "Mail sent successfully!",
         "passwordChanged": "Password changed successfully",
         "passwordChangeFailed": "Password change failed",
-        "previousPasswordError": "New password cannot be the same as the old password"
+        "previousPasswordError": "New password cannot be the same as the old password",
+        "success": "Success"
     }
 }

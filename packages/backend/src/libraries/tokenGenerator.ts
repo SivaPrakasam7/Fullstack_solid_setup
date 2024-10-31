@@ -1,63 +1,54 @@
-import { Request } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt from 'jsonwebtoken';
-import { createError } from 'src/handler/error';
 
 //
-import messages from 'src/utils/messages.json';
-
-//
-export const verifyToken: IVerifyToken = (req) => {
-    return new Promise((resolve) => {
-        const requestToken = req.headers.authorization?.split(' ')?.[1];
-        if (!requestToken)
-            throw createError(400, messages.responses.tokenNotFound);
-
+export const verifyToken: IVerifyToken = (token: string) => {
+    return new Promise((resolve, reject) => {
         jwt.verify(
-            requestToken,
+            token,
             process.env.SECRET_KEY!,
             {
                 ignoreExpiration: process.env.MODE === 'test',
             },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             async (err, payload: any) => {
-                if (err)
-                    throw createError(400, messages.responses.tokenExpired);
+                if (err) reject(err);
                 resolve(payload);
             }
         );
     });
 };
 
-export const generateRefreshTokenByToken: IGenerateRefreshToken = (req) => {
+export const generateTokenByRefreshToken: IGenerateRefreshToken = (token) => {
     return new Promise((resolve) => {
-        verifyToken(req).then((result) => {
+        verifyToken(token).then((result) => {
             const token = generateToken({
-                id: result.id,
+                ...result,
             });
             resolve(token);
         });
     });
 };
 
-export const generateToken: IGenerateToken = (data) => {
+export const generateToken: IGenerateToken = (data, verification = false) => {
     const token = jwt.sign(
         data,
         process.env.SECRET_KEY!,
         process.env.MODE === 'test'
             ? {}
             : {
-                  expiresIn: process.env.EXPIRES_IN,
+                  expiresIn: verification
+                      ? process.env.EXPIRES_IN
+                      : process.env.REFRESH_TOKEN_EXPIRES_IN,
               }
     );
     return token;
 };
 
-export type IVerifyToken = (
-    req: Request
-) => Promise<Record<string, string | number | boolean>>;
+export type IVerifyToken = (token: string) => Promise<Record<string, any>>;
 
 export type IGenerateToken = (
-    data: Record<string, string | number | boolean>
+    data: Record<string, any>,
+    verification?: boolean
 ) => string;
 
-export type IGenerateRefreshToken = (req: Request) => Promise<string>;
+export type IGenerateRefreshToken = (token: string) => Promise<string>;

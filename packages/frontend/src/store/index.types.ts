@@ -1,6 +1,6 @@
 export interface IStoreProps {
     user: ILargeRecord;
-    token: string;
+    token: string | null;
 }
 
 export interface IAppStoreProps {

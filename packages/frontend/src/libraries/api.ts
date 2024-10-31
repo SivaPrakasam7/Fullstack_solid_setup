@@ -5,6 +5,7 @@ import router from 'src/app/router';
 
 const client = Axios.default.create({
     baseURL,
+    withCredentials: true,
 });
 
 export const Request = (
@@ -16,7 +17,6 @@ export const Request = (
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${store.state.token}`,
             ...headers,
         },
         data,

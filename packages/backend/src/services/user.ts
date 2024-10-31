@@ -46,14 +46,15 @@ export const createUserService: IService<string> = async (data) => {
 
     if (!result) throw createError(400, messages.responses.failedToCreateUser);
 
-    const token = await generateToken({ userId, secretKey });
-
     await requestVerificationService(userId);
 
-    return token;
+    return messages.responses.userCreated;
 };
 
-export const loginService: IService<string> = async (data) => {
+export const loginService: IService<{
+    refreshToken: string;
+    accessToken: string;
+}> = async (data) => {
     const user = await getUserBySourceRepo({
         email: data.email,
     });
@@ -74,11 +75,19 @@ export const loginService: IService<string> = async (data) => {
     if (!isSourceVerified)
         throw createError(400, messages.responses.unverifiedUser);
 
-    const token = await generateToken({
+    const payload = {
         userId: user.userId,
         secretKey: user.secretKey,
+    };
+
+    const newRefreshToken = await generateToken({
+        ...payload,
+        lastUsed: Date.now(),
     });
-    return token;
+
+    const newAccessToken = await generateToken(payload);
+
+    return { refreshToken: newRefreshToken, accessToken: newAccessToken };
 };
 
 export const getUserService: IService<Record<string, string>> = async (
@@ -90,11 +99,15 @@ export const getUserService: IService<Record<string, string>> = async (
 
 export const requestVerificationService = async (userId: string) => {
     const user = await getUserByIdRepo(userId);
+    const verification = true;
 
-    const verificationToken = await generateToken({
-        userId,
-        email: user.email,
-    });
+    const verificationToken = await generateToken(
+        {
+            userId,
+            email: user.email,
+        },
+        verification
+    );
     const emailVerificationLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.VERIFICATION_URL}${verificationToken}`;
 
     await sendMail(
@@ -134,10 +147,14 @@ export const forgotPasswordService: IService<string> = async (data) => {
     if (!isSourceVerified)
         throw createError(400, messages.responses.unverifiedUser);
 
-    const token = await generateToken({
-        userId: user.userId,
-        email: user.email,
-    });
+    const verification = true;
+    const token = await generateToken(
+        {
+            userId: user.userId,
+            email: user.email,
+        },
+        verification
+    );
 
     const resetPasswordLink = `${process.env.PROTOCOL}://${process.env.DOMAIN}/${process.env.RESET_PASSWORD_URL}${token}`;
 

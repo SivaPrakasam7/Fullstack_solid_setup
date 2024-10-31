@@ -9,12 +9,16 @@ import {
     verificationService,
 } from 'src/services/user';
 
+//
+import messages from 'src/utils/messages.json';
+
+//
 export const createUserController: IMiddleWare = async (req, res, next) => {
     try {
         const data = req.body;
-        const token = await createUserService(data);
+        const result = await createUserService(data);
 
-        res.status(200).json({ data: { token } });
+        res.status(200).json({ data: result });
     } catch (e) {
         next(e as IError);
     }
@@ -23,9 +27,20 @@ export const createUserController: IMiddleWare = async (req, res, next) => {
 export const loginController: IMiddleWare = async (req, res, next) => {
     try {
         const data = req.body;
-        const token = await loginService(data);
+        const result = await loginService(data);
 
-        res.status(200).json({ data: { token } });
+        res.cookie('refreshToken', result.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+        });
+        res.cookie('accessToken', result.accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+        });
+
+        res.status(200).json({ data: result });
     } catch (e) {
         next(e as IError);
     }
@@ -81,6 +96,25 @@ export const changePasswordController: IMiddleWare = async (req, res, next) => {
         const result = await changePasswordService(data);
 
         res.status(200).json({ message: result });
+    } catch (e) {
+        next(e as IError);
+    }
+};
+
+export const logoutController: IMiddleWare = async (req, res, next) => {
+    try {
+        res.cookie('refreshToken', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+        });
+        res.cookie('accessToken', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+        });
+
+        res.status(200).json({ message: messages.responses.success });
     } catch (e) {
         next(e as IError);
     }

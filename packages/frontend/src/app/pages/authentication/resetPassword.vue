@@ -8,7 +8,7 @@
                 :form="form"
                 :call="call"
                 button-text="Change Password"
-                layout-class="gap-4 max-w-[400px] w-full"
+                layout-class="gap-1"
             />
         </div>
     </div>
@@ -16,7 +16,7 @@
 
 <script lang="ts">
 //
-import { requestResetPassword } from 'src/repository/authentication';
+import { changePassword } from 'src/repository/authentication';
 import { passwordRegex } from 'src/constants/regex';
 
 //
@@ -57,9 +57,18 @@ export default {
             } as Record<string, ILargeRecord>,
         };
     },
+    mounted() {
+        if (!this.$router.currentRoute.value.query.token) {
+            this.$router.push({ name: 'main' });
+        }
+    },
     methods: {
         async call(payload: ILargeRecord) {
-            const res = await requestResetPassword(payload);
+            const res = await changePassword(
+                payload,
+                this.$router.currentRoute.value.query.token as string
+            );
+            if (!res.error) this.$router.push({ name: 'signIn' });
             return !res.error;
         },
     },

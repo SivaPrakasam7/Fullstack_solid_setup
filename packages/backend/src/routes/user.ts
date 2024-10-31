@@ -7,8 +7,12 @@ import {
     userController,
     requestVerifyController,
     verifyController,
+    logoutController,
 } from 'src/controller/user';
-import { tokenChecker } from 'src/handler/tokenVerification';
+import {
+    headerTokenChecker,
+    tokenChecker,
+} from 'src/handler/tokenVerification';
 import { validator } from 'src/handler/validator';
 import {
     createUserValidation,
@@ -26,16 +30,17 @@ router.route('/login').post(validator(loginValidation), loginController);
 router.route('/profile').get(tokenChecker, userController);
 
 router.route('/request-verification').get(requestVerifyController);
-router.route('/verify').get(tokenChecker, verifyController);
+router.route('/verify').get(headerTokenChecker, verifyController);
 router
     .route('/request-reset-password')
     .post(validator(forgotPasswordValidation), forgotPasswordController);
 router
     .route('/change-password')
     .post(
-        tokenChecker,
+        headerTokenChecker,
         validator(resetPasswordValidation),
         changePasswordController
     );
+router.route('/logout').get(logoutController);
 
 export default router;
