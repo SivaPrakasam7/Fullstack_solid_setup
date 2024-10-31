@@ -8,7 +8,6 @@ export const createError = (code: number, message: string) => {
     return error;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: IErrorHandler = (error, _req, res, _next) => {
     logErrorToFile(error);
     res.status(error.code || 500).send({
