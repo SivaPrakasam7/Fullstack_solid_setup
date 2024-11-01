@@ -85,13 +85,8 @@ jobs:
 
             - name: Run jest
               working-directory: packages/backend
-              run: npm run test | tee output.txt
+              run: npm run test
 
-            - name: Upload Check Summary
-              if: failure()
-              run: |
-                  echo "### Backend Test Result" >> $GITHUB_STEP_SUMMARY
-                  cat output.txt >> $GITHUB_STEP_SUMMARY
 
     cypress-component-test:
         runs-on: ubuntu-latest
