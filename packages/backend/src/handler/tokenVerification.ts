@@ -15,51 +15,30 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
         if (!refreshToken || !accessToken)
             return next(createError(401, messages.responses.tokenNotFound));
 
-        const decodedToken = await verifyToken(refreshToken);
-
         let result;
         try {
             result = await verifyToken(accessToken);
         } catch {
             result = await verifyToken(refreshToken);
-        }
-        const { lastUsed: _, ...payload } = result;
 
-        const twoWeeks = 14 * 24 * 60 * 60 * 1000;
-        if (Date.now() - decodedToken.lastUsed > twoWeeks) {
-            res.cookie('refreshToken', '', {
+            const newAccessTokenToken = await generateToken(result, true);
+            res.cookie('accessToken', newAccessTokenToken, {
                 httpOnly: true,
-                secure: true,
+                secure: process.env.MODE === 'production',
                 sameSite: 'strict',
             });
-            res.cookie('accessToken', '', {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-            });
-            return next(createError(401, messages.responses.tokenExpired));
         }
 
-        const newRefreshToken = await generateToken({
-            ...payload,
-            lastUsed: Date.now(),
-        });
-
-        const newAccessTokenToken = await generateToken(payload, true);
+        const newRefreshToken = await generateToken(result);
 
         req.body = {
-            ...payload,
+            ...result,
             ...req.body,
         };
 
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-        });
-        res.cookie('accessToken', newAccessTokenToken, {
-            httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
 
@@ -67,12 +46,12 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
     } catch {
         res.cookie('refreshToken', '', {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
         res.cookie('accessToken', '', {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
         return next(createError(401, messages.responses.tokenExpired));

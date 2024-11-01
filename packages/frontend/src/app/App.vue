@@ -18,7 +18,7 @@
 import { RouterView } from 'vue-router';
 
 //
-import { appStore, store } from 'src/store';
+import { appStore } from 'src/store';
 import Toast from 'src/app/components/toast.vue';
 
 //
@@ -28,9 +28,6 @@ export default {
         Toast,
         RouterView,
     },
-    data() {
-        return { loading: true };
-    },
     computed: {
         toasts() {
             return appStore.state.toasts.filter(Boolean);
@@ -39,9 +36,6 @@ export default {
     created() {
         document.getElementsByTagName('title')[0]!.innerText =
             import.meta.env.VITE_APP_NAME;
-        store.commit('getProfile', () => {
-            this.loading = false;
-        });
     },
 };
 </script>

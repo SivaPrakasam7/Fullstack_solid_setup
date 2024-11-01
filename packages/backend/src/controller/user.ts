@@ -31,12 +31,12 @@ export const loginController: IMiddleWare = async (req, res, next) => {
 
         res.cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
         res.cookie('accessToken', result.accessToken, {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
 
@@ -105,12 +105,12 @@ export const logoutController: IMiddleWare = async (req, res, next) => {
     try {
         res.cookie('refreshToken', '', {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
         res.cookie('accessToken', '', {
             httpOnly: true,
-            secure: true,
+            secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
 

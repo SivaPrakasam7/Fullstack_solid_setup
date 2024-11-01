@@ -8,6 +8,7 @@ import { appMutations, mutations } from './mutations';
 //
 export const storage = new VuexPersistense({
     key: import.meta.env.VITE_APP_NAME,
+    storage: window.localStorage,
 });
 
 export const store = new Vuex.Store<IStoreProps>({
