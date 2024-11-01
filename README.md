@@ -14,7 +14,6 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
 -   **Node.js**: JavaScript runtime for building scalable backend services.
 -   **MySQL**: Relational database used for storing and managing data.
--   **Jest**: Testing framework for unit and integration tests in Node.js.
 
 -   **Lerna**: Monorepo tool to manage multiple projects and dependencies.
 -   **Prettier**: Code formatter that ensures consistent coding styles.
