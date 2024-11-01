@@ -32,6 +32,7 @@ import { emailRegex } from 'src/constants/regex';
 
 //
 import FormBuilder from 'src/app/components/form/main.vue';
+import { store } from 'src/store';
 
 //
 export default {
@@ -71,7 +72,11 @@ export default {
     methods: {
         async call(payload: ILargeRecord) {
             const res = await login(payload);
-            if (!res.error) this.$router.push({ name: 'main' });
+            if (!res.error) {
+                await store.commit('getProfile', () => {
+                    this.$router.push({ name: 'main' });
+                });
+            }
             return !res.error;
         },
     },

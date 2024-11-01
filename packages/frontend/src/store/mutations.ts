@@ -9,12 +9,20 @@ import type { IAppStoreProps, IStoreProps, IToast } from './index.types';
 //
 export const mutations: Vuex.MutationTree<IStoreProps> = {
     getProfile: async (state, callback?: () => void) => {
+        if (
+            state.user?.userId &&
+            localStorage.getItem('lastAccessedDomain') === window.location.host
+        ) {
+            callback?.();
+            return;
+        }
         state.user = await getUserDetail();
+
+        localStorage.setItem('lastAccessedDomain', window.location.host);
         callback?.();
     },
-    setToken: async (state, token: string | null) => {
-        state.token = token;
-        if (!token) state.user = null;
+    clearUser: async (state) => {
+        state.user = null;
     },
 };
 

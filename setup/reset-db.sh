@@ -25,6 +25,6 @@ if [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ]; then
 fi
 
 # Drop and recreate the database, then import the structure
-mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS home_management"
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS fullstack"
 
 lerna run migrate --stream --scope=backend

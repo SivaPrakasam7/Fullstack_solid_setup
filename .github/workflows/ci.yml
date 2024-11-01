@@ -85,7 +85,7 @@ jobs:
 
             - name: Run jest
               working-directory: packages/backend
-              run: npm run test > output.txt
+              run: npm run test | tee output.txt
 
             - name: Upload Check Summary
               if: failure()

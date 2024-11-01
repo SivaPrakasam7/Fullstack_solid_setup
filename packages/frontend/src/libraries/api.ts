@@ -32,7 +32,7 @@ export const Request = (
                 e.response.status === 401 &&
                 store.state.user?.id
             ) {
-                store.commit('getProfile');
+                store.commit('clearUser');
                 router.push({ name: 'main' });
                 return { error: true, message: 'Token expired please login' };
             }

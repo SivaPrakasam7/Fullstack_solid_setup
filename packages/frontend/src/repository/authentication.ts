@@ -9,10 +9,7 @@ export const login = (payload: { email: string; password: string }) =>
         },
         payload
     ).then(async (res) => {
-        if (!res.error) {
-            await store.commit('setToken', res.data.token);
-            await store.commit('getProfile');
-        } else {
+        if (res.error) {
             appStore.commit('setToast', {
                 type: 'error',
                 message: res.message,
@@ -89,6 +86,6 @@ export const getUserDetail = () =>
 
 export const logout = () =>
     Request({ method: 'get', url: `v1/user/logout` }).then((res) => {
-        store.commit('getProfile');
+        store.commit('clearUser');
         return res.error ? res : res?.data?.user;
     });

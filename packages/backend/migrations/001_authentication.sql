@@ -1,4 +1,4 @@
-use `home_management`;
+use `fullstack`;
 
 -- Users
 DROP TABLE IF EXISTS `users`;

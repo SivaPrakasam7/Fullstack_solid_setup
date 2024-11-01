@@ -36,6 +36,7 @@ export default {
             return !!store.state.user?.userId;
         },
     },
+
     methods: {
         goToLogin() {
             this.$router.push({ name: 'signIn' });
