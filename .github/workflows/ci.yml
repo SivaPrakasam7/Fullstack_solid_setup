@@ -10,6 +10,10 @@ on:
         branches: [master]
         paths: ['packages/frontend/**', 'packages/backend/**']
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     code-quality-check:
         runs-on: ubuntu-latest

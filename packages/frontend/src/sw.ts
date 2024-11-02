@@ -1,12 +1,12 @@
 const CACHE_NAME = import.meta.env.VITE_APP_NAME;
 
 self.addEventListener('install', (event) => {
-    console.info('Service Worker installing.');
+    console.info('Service Worker installing');
     event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
-    console.info('Service Worker activating.');
+    console.info('Service Worker activating');
     event.waitUntil(
         caches.keys().then(function (cacheNames) {
             return Promise.all(
