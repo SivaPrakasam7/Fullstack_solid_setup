@@ -183,7 +183,7 @@ describe('Users API', () => {
 
         response = await request(app).get('/v1/user/profile').send();
         expect(response.status).toBe(401);
-        expect(response.body.message).toEqual('Token not found');
+        expect(response.body.message).toEqual('Unauthorized');
 
         const cookies = `accessToken=${accessToken};refreshToken=${refreshToken}`;
 

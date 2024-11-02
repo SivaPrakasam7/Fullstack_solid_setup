@@ -24,7 +24,7 @@
                     'w-full rounded-xl outline-none bg-white',
                     size || 'p-3 text-md',
                     disabled
-                        ? 'bg-gray-200 text-gray-400 dark:text-gray-300'
+                        ? 'bg-gray-400 text-gray-400 dark:text-gray-300'
                         : '',
                     handleInput
                         ? '!text-default'

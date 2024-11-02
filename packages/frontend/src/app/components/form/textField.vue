@@ -18,7 +18,7 @@
             :class="[
                 'flex text-md border border-gray-300 hover:border-gray-500 text-md w-full rounded-xl relative items-center gap-1 transition-border duration-300',
                 layoutClass,
-                disabled ? 'bg-gray-200 text-gray-400 dark:text-gray-300' : '',
+                disabled ? 'bg-gray-400 text-gray-400 dark:text-gray-300' : '',
             ]"
         >
             <slot name="startIcon" />

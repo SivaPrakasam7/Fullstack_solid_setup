@@ -13,7 +13,7 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
         const accessToken = req.cookies.accessToken;
 
         if (!refreshToken || !accessToken)
-            return next(createError(401, messages.responses.tokenNotFound));
+            return next(createError(401, messages.responses.unauthorized));
 
         let result;
         try {
@@ -54,7 +54,7 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
             secure: process.env.MODE === 'production',
             sameSite: 'strict',
         });
-        return next(createError(401, messages.responses.tokenExpired));
+        return next(createError(401, messages.responses.unauthorized));
     }
 };
 
@@ -62,7 +62,7 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
 export const headerTokenChecker: IMiddleWare = async (req, _, next) => {
     try {
         const token = req.headers.authorization?.split(' ')?.[1];
-        if (!token) throw createError(401, messages.responses.tokenNotFound);
+        if (!token) throw createError(401, messages.responses.unauthorized);
 
         const result = await verifyToken(token);
 
@@ -73,7 +73,7 @@ export const headerTokenChecker: IMiddleWare = async (req, _, next) => {
 
         next();
     } catch {
-        return next(createError(401, messages.responses.tokenExpired));
+        return next(createError(401, messages.responses.unauthorized));
     }
 };
 

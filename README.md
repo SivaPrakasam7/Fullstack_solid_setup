@@ -6,6 +6,8 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
 ## Technologies
 
+## Technologies
+
 -   **Vue**: Popular frontend framework for building user interfaces.
 -   **Vite**: Fast build tool for modern web development with support for hot module replacement.
 -   **TypeScript**: Superset of JavaScript providing static typing for better code quality.
@@ -27,6 +29,18 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 -   **Vite Plugins**: Added for optimizing PWA features and removing unnecessary test case IDs in production builds.
 
 -   **Error/Security Middlewares**: Handles error responses, security measures, and logs access/errors for auditing.
+
+-   **Swagger**: Used for API documentation, providing a user-friendly interface to explore and test API endpoints.
+
+## Quick Working Preview
+
+### Setup and test command
+
+<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700" height="400"/>
+
+### Cypress E2E test videos
+
+<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700" height="400"/>
 
 ## Installation
 

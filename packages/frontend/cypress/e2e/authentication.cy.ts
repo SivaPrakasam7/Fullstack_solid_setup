@@ -68,7 +68,7 @@ describe('Authentication', () => {
         cy.visit(`${baseURL}/verify?token=${register.email}`);
         cy.get('[data-testId="MESSAGE"]').should(
             'include.text',
-            'Token expired'
+            'Unauthorized'
         );
 
         cy.visit(`${baseURL}/verify?token=${token}`);

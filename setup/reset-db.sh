@@ -28,3 +28,13 @@ fi
 mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS fullstack"
 
 lerna run migrate --stream --scope=backend
+
+# Remove files in logs if the logs directory exists and is not empty
+if [ -d "packages/backend/logs" ] && [ "$(ls -A packages/backend/logs)" ]; then
+    rm -rf packages/backend/logs/*
+fi
+
+# Remove files in backups if the backups directory exists and is not empty
+if [ -d "packages/backend/backups" ] && [ "$(ls -A packages/backend/backups)" ]; then
+    rm -rf packages/backend/backups/*
+fi

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import swaggerUI from 'swagger-ui-express';
 
 dotenv.config();
 
@@ -11,26 +12,28 @@ dotenv.config();
 import { errorHandler } from 'src/handler/error';
 import { logAccess } from 'src/handler/logger';
 import userRotes from 'src/routes/user';
+import { swaggerSpec } from 'src/swagger';
 
 //
 const app = express();
 const port = process.env.PORT;
 
-app.use(logAccess);
-
 app.use(bodyParser.json({ limit: '5MB' }));
 app.use(bodyParser.urlencoded({ limit: '5MB', extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: 'http://localhost:3008', credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.xssFilter());
 app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
+app.use(logAccess);
 
-app.get('/', (req, res) => {
-    res.send('Hello, TypeScript with Express!');
+app.get('/', (_, res) => {
+    res.send('API running successfully!');
 });
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use('/v1/user', userRotes);
 
