@@ -1,4 +1,4 @@
-name: Code quality check and Cypress e2e test
+name: Code quality check and Testing
 
 on:
     pull_request:
