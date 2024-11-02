@@ -157,7 +157,7 @@ The workflow includes four jobs:
     - **Cypress Component Testing**: Runs Cypress component tests.
     - **Upload Test Artifacts**: If any tests fail, artifacts such as screenshots are uploaded for further investigation.
 
-4. **Cypress E2E Test**:
+4. **Cypress E2E Desktop/Mobile**:
     - **MySQL Service**: Sets up a MySQL service for the E2E tests.
     - **Frontend and Backend Setup**: Installs dependencies and sets up both the frontend and backend environments using environment variables. Also runs backend migrations.
     - **Run Services**: Uses `lerna` to start both the frontend and backend services.
