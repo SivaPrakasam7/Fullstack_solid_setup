@@ -62,7 +62,7 @@ export const tokenChecker: IMiddleWare = async (req, res, next) => {
 export const headerTokenChecker: IMiddleWare = async (req, _, next) => {
     try {
         const token = req.headers.authorization?.split(' ')?.[1];
-        if (!token) throw createError(400, messages.responses.tokenNotFound);
+        if (!token) throw createError(401, messages.responses.tokenNotFound);
 
         const result = await verifyToken(token);
 

@@ -3,6 +3,7 @@ import nodemailerMock from 'nodemailer-mock';
 import app from 'src';
 import { executeQuery, MYSQLConnection } from 'src/handler/db.ts';
 import { user } from './data';
+import { waitForEmail } from './utils';
 
 describe('Users API', () => {
     let payload = {};
@@ -88,11 +89,9 @@ describe('Users API', () => {
         expect(response.body.message).toEqual('Account not verified');
 
         // After email verification
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const sentEmails = nodemailerMock.mock.getSentMail();
-        const verificationEmail = sentEmails[0];
+        const verificationEmail = await waitForEmail();
         const verificationToken = (verificationEmail.html as string)!.match(
-            /verify\?token=(\w+\.\w+\.\w+)/
+            /verify\?token=([^\s].*)" class/
         )![1];
 
         response = await request(app)
@@ -125,12 +124,10 @@ describe('Users API', () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toEqual('Mail sent successfully!');
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const sentEmails = nodemailerMock.mock.getSentMail();
-        const resetLinkEmail = sentEmails[1];
+        const resetLinkEmail = await waitForEmail();
 
         const resetToken = (resetLinkEmail.html as string)!.match(
-            /reset-password\?token=(\w+\.\w+\.\w+)/
+            /reset-password\?token=(.*)" class/
         )![1];
 
         payload = {};

@@ -7,9 +7,6 @@ export const verifyToken: IVerifyToken = (token: string) => {
         jwt.verify(
             token,
             process.env.SECRET_KEY!,
-            {
-                ignoreExpiration: process.env.MODE === 'test',
-            },
             async (err, payload: any) => {
                 if (err) reject(err);
                 resolve(payload);
@@ -30,17 +27,12 @@ export const generateTokenByRefreshToken: IGenerateRefreshToken = (token) => {
 };
 
 export const generateToken: IGenerateToken = (data, verification = false) => {
-    const token = jwt.sign(
-        data,
-        process.env.SECRET_KEY!,
-        process.env.MODE === 'test'
-            ? {}
-            : {
-                  expiresIn: verification
-                      ? process.env.EXPIRES_IN
-                      : process.env.REFRESH_TOKEN_EXPIRES_IN,
-              }
-    );
+    const { exp: _, iat: __, ...payload } = data;
+    const token = jwt.sign(payload, process.env.SECRET_KEY!, {
+        expiresIn: verification
+            ? process.env.EXPIRES_IN
+            : process.env.REFRESH_TOKEN_EXPIRES_IN,
+    });
     return token;
 };
 
