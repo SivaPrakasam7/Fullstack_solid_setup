@@ -6,9 +6,9 @@
         "node": "v20.14.0"
     },
     "scripts": {
-        "test": "jest --detectOpenHandles --verbose",
+        "test": "MODE=test jest --detectOpenHandles --verbose",
         "start": "ts-node -r tsconfig-paths/register src/index.ts",
-        "dev": "nodemon -r tsconfig-paths/register src/index.ts",
+        "dev": "MODE=development nodemon -r tsconfig-paths/register src/index.ts",
         "migrate": "node migrate.js",
         "build": "npx tsc"
     },

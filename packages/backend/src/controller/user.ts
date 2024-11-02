@@ -18,7 +18,7 @@ export const createUserController: IMiddleWare = async (req, res, next) => {
         const data = req.body;
         const result = await createUserService(data);
 
-        res.status(200).json({ data: result });
+        res.status(200).json({ message: result });
     } catch (e) {
         next(e as IError);
     }

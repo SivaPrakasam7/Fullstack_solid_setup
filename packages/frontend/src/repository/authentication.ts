@@ -77,7 +77,7 @@ export const verifyAccount = (token: string) =>
         {
             Authorization: `Bearer ${token}`,
         }
-    ).then((res) => (res.error ? res : res.data));
+    );
 
 export const getUserDetail = () =>
     Request({ method: 'get', url: `v1/user/profile` }).then((res) =>

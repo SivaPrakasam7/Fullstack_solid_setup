@@ -6,6 +6,7 @@ import { svgIconsPlugin } from './plugins/vite-svg-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+    console.log(mode);
     return {
         server: {
             port: 3008,
@@ -13,7 +14,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             vue(),
             svgIconsPlugin('./public/icons/svg'),
-            mode !== 'test'
+            !['test', 'development'].includes(mode)
                 ? removeAttribute({
                       extensions: ['vue'],
                       attributes: ['data-testId'],

@@ -46,9 +46,11 @@ export const createUserService: IService<string> = async (data) => {
 
     if (!result) throw createError(400, messages.responses.failedToCreateUser);
 
-    await requestVerificationService(userId);
+    const token = await requestVerificationService(userId);
 
-    return messages.responses.userCreated;
+    return process.env.MODE === 'development'
+        ? token
+        : messages.responses.userCreated;
 };
 
 export const loginService: IService<{
@@ -123,7 +125,9 @@ export const requestVerificationService = async (userId: string) => {
         }
     );
 
-    return messages.responses.mailSent;
+    return process.env.MODE === 'development'
+        ? verificationToken
+        : messages.responses.mailSent;
 };
 
 export const verificationService = async (payload: {
@@ -171,7 +175,9 @@ export const forgotPasswordService: IService<string> = async (data) => {
         }
     );
 
-    return messages.responses.mailSent;
+    return process.env.MODE === 'development'
+        ? token
+        : messages.responses.mailSent;
 };
 
 export const changePasswordService: IService<string> = async (data) => {

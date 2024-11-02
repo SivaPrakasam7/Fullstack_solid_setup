@@ -4,6 +4,7 @@ import { baseURL } from '../fixtures';
 import { register } from '../fixtures/users';
 
 describe('Authentication', () => {
+    let token = '';
     it('Create account', () => {
         cy.visit(`${baseURL}/sign-up`);
 
@@ -58,8 +59,24 @@ describe('Authentication', () => {
         cy.get('[data-testId="SUBMIT"]').click();
 
         cy.wait('@createAccount').then((interception) => {
+            token = interception.response?.body?.message;
             expect(interception.response?.statusCode).to.equal(200);
         });
+    });
+
+    it('Verify user account', () => {
+        cy.visit(`${baseURL}/verify?token=${register.email}`);
+        cy.get('[data-testId="MESSAGE"]').should(
+            'include.text',
+            'Token expired'
+        );
+
+        cy.visit(`${baseURL}/verify?token=${token}`);
+
+        cy.get('[data-testId="MESSAGE"]').should(
+            'include.text',
+            'Account verified'
+        );
     });
 
     it('Login account', () => {
@@ -133,12 +150,13 @@ describe('Authentication', () => {
         cy.get('[data-testId="SUBMIT"]').click();
 
         cy.wait('@forgotPassword').then((interception) => {
+            token = interception.response?.body?.message;
             expect(interception.response?.statusCode).to.equal(200);
         });
     });
 
     it('Reset password', () => {
-        cy.visit(`${baseURL}/reset-password`);
+        cy.visit(`${baseURL}/reset-password?token=${token}`);
 
         // API
         cy.intercept('POST', `/v1/user/change-password`).as('changePassword');

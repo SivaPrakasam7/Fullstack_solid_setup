@@ -11,7 +11,9 @@ export const sendMail: ISendMail = async (templatePath, data, config) => {
     mailConfigurations.html = renderHTML(template, data);
 
     const _transporter =
-        process.env.MODE === 'test' ? await testTransporter : transporter;
+        process.env.MODE === 'development' && testTransporter
+            ? await testTransporter
+            : transporter;
 
     return new Promise((resolve) => {
         _transporter.sendMail(mailConfigurations, (error, data) => {
