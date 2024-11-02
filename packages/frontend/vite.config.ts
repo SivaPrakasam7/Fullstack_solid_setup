@@ -6,7 +6,6 @@ import { svgIconsPlugin } from './plugins/vite-svg-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-    console.log(mode);
     return {
         server: {
             port: 3008,
