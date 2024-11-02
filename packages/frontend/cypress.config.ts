@@ -3,8 +3,6 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
     waitForAnimations: true,
     video: true,
-    viewportWidth: 1920,
-    viewportHeight: 1080,
     e2e: {
         setupNodeEvents() {
             // implement node event listeners here

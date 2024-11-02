@@ -130,7 +130,63 @@ jobs:
                   path: |
                       packages/frontend/cypress/screenshots
 
-    cypress-e2e-test:
+    cypress-e2e-desktop:
+        runs-on: ubuntu-latest
+
+        services:
+            db:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+
+        steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.14.0'
+
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Cache npm dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Setup Frontend
+              working-directory: packages/frontend
+              run: echo "${{ secrets.TEST_FRONTEND_ENV }}" > .env
+
+            - name: Setup Backend
+              working-directory: packages/backend
+              run: |
+                  echo "${{ secrets.TEST_BACKEND_ENV }}" > .env
+                  npm run migrate
+
+            - name: Run Services
+              run: nohup lerna run dev --stream --scope=frontend --scope=backend -- --mode test &
+
+            - name: Cypress run
+              working-directory: packages/frontend
+              run: npm run cy:chrome -- --e2e
+
+            - name: Archive production artifacts
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: cypress-results
+                  path: |
+                      packages/frontend/cypress/screenshots
+
+    cypress-e2e-mobile:
         runs-on: ubuntu-latest
 
         services:

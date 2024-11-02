@@ -3,8 +3,16 @@
 import { baseURL } from '../fixtures';
 import { register } from '../fixtures/users';
 
+const viewportWidth = Cypress.env('viewportWidth') || 1280;
+const viewportHeight = Cypress.env('viewportHeight') || 720;
+
 describe('Authentication', () => {
     let token = '';
+
+    beforeEach(() => {
+        cy.viewport(viewportWidth, viewportHeight);
+    });
+
     it('Create account', () => {
         cy.visit(`${baseURL}/sign-up`);
 
