@@ -170,8 +170,8 @@ This workflow ensures that every code change passes linting, code duplication ch
 
 ### Setup and test command
 
-<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700" height="400"/>
+<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700"/>
 
 ### Cypress E2E testcase video
 
-<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700" height="400"/>
+<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700"/>
