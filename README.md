@@ -30,31 +30,31 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
 -   **Swagger**: Used for API documentation, providing a user-friendly interface to explore and test API endpoints.
 
-## Quick Working Preview
-
-### Setup and test command
-
-<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700" height="400"/>
-
-### Cypress E2E testcase video
-
-<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700" height="400"/>
+## Code Architecture Flow Diagram
+![Code Flow](doc/code_flow.png)
 
 ## Installation
 
-1. Install dependencies:
-
+1. **Install dependencies**:
     ```bash
     npm ci
     ```
 
-2. Run backend migrations:
-
+2. **Create a `.env` file**: Copy the `.env-example` file to `.env` and update the values with your specific configuration.
+    ```bash
+    cp .env-example .env
+    ```
+    
+3. **Run backend migrations**:
     ```bash
     lerna run migrate --stream --scope=backend
     ```
 
-3. Create a `.env` file with database, port, and API key info.
+4. **Start the development server** (optional, if applicable):
+    ```bash
+    lerna run dev --stream --scope=frontend --scope=backend
+    ```
+
 
 ## Development Workflow
 
@@ -165,3 +165,13 @@ The workflow includes four jobs:
     - **Upload Test Artifacts**: If any tests fail, artifacts like screenshots are uploaded for review.
 
 This workflow ensures that every code change passes linting, code duplication checks, and comprehensive testing (unit, component, and E2E) before merging into the `master` branch.
+
+## Quick Working Preview
+
+### Setup and test command
+
+<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700" height="400"/>
+
+### Cypress E2E testcase video
+
+<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700" height="400"/>
