@@ -1,8 +1,6 @@
 use `fullstack`;
 
 -- Users
-DROP TABLE IF EXISTS `users`;
-
 CREATE TABLE
     `users` (
         `id` int (11) AUTO_INCREMENT,
@@ -23,11 +21,10 @@ CREATE TABLE
     );
 
 CREATE INDEX idx_userId ON `users` (`userId`);
+
 CREATE INDEX idx_email ON `users` (`email`);
 
 -- Verifications
-DROP TABLE IF EXISTS `verifications`;
-
 CREATE TABLE
     `verifications` (
         `id` INT (11) AUTO_INCREMENT,
