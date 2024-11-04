@@ -275,7 +275,8 @@ export interface IFormField {
         | 'time'
         | 'datetime-local'
         | 'file'
-        | 'tag';
+        | 'tag'
+        | 'password';
     placeHolder?: string;
     rows?: string;
     alignClass?: string;

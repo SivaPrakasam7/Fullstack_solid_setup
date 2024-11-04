@@ -20,7 +20,7 @@ import { changePassword } from 'src/repository/authentication';
 import { passwordRegex } from 'src/constants/regex';
 
 //
-import FormBuilder from 'src/app/components/form/main.vue';
+import FormBuilder, { IFormField } from 'src/app/components/form/main.vue';
 
 export default {
     name: 'SignInPage',
@@ -54,7 +54,7 @@ export default {
                     value: '',
                     requiredLabel: 'Please enter confirmation password',
                 },
-            } as Record<string, ILargeRecord>,
+            } as Record<string, IFormField>,
         };
     },
     mounted() {

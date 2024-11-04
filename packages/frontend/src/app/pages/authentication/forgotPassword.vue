@@ -26,7 +26,7 @@ import { requestResetPassword } from 'src/repository/authentication';
 import { emailRegex } from 'src/constants/regex';
 
 //
-import FormBuilder from 'src/app/components/form/main.vue';
+import FormBuilder, { IFormField } from 'src/app/components/form/main.vue';
 
 export default {
     name: 'ForgotPasswordPage',
@@ -51,7 +51,7 @@ export default {
                         },
                     ],
                 },
-            } as Record<string, ILargeRecord>,
+            } as Record<string, IFormField>,
         };
     },
     methods: {
