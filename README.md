@@ -31,11 +31,13 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 -   **Swagger**: Used for API documentation, providing a user-friendly interface to explore and test API endpoints.
 
 ## Code Architecture Flow Diagram
+
 ![Code Flow](doc/code_flow.png)
 
 ## Installation
 
 1. **Install dependencies**:
+
     ```bash
     npm ci
     ```
@@ -44,8 +46,8 @@ This repository provides a **common project setup** for web apps using **Vue**, 
     ```bash
     cp .env-example .env
     ```
-    
 3. **Run backend migrations**:
+
     ```bash
     npx lerna run migrate --stream --scope=backend
     ```
@@ -54,7 +56,6 @@ This repository provides a **common project setup** for web apps using **Vue**, 
     ```bash
     npx lerna run dev --stream --scope=frontend --scope=backend
     ```
-
 
 ## Development Workflow
 
