@@ -8,14 +8,17 @@
         <p>
             {{
                 isSignedIn
-                    ? 'User logged  in successfully'
+                    ? `${name} logged in successfully`
                     : 'User need to login'
             }}
         </p>
         <button v-if="isSignedIn" class="app-button" @click="logout">
             Logout
         </button>
-        <button v-else class="app-button" @click="goToLogin">Login</button>
+        <div v-else class="flex gap-2">
+            <button class="app-button" @click="goToSignIn">Sign In</button>
+            <button class="app-button" @click="goToSignUp">Sign Up</button>
+        </div>
     </div>
 </template>
 
@@ -32,14 +35,20 @@ export default {
         };
     },
     computed: {
+        name() {
+            return store.state.user?.name;
+        },
         isSignedIn() {
             return !!store.state.user?.userId;
         },
     },
 
     methods: {
-        goToLogin() {
+        goToSignIn() {
             this.$router.push({ name: 'signIn' });
+        },
+        goToSignUp() {
+            this.$router.push({ name: 'signUp' });
         },
     },
 };

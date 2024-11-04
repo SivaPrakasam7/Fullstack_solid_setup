@@ -47,12 +47,12 @@ This repository provides a **common project setup** for web apps using **Vue**, 
     
 3. **Run backend migrations**:
     ```bash
-    lerna run migrate --stream --scope=backend
+    npx lerna run migrate --stream --scope=backend
     ```
 
 4. **Start the development server** (optional, if applicable):
     ```bash
-    lerna run dev --stream --scope=frontend --scope=backend
+    npx lerna run dev --stream --scope=frontend --scope=backend
     ```
 
 
@@ -60,17 +60,17 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
 -   Start the frontend and backend:
     ```bash
-    lerna run dev --stream --scope=frontend --scope=backend
+    npx lerna run dev --stream --scope=frontend --scope=backend
     ```
 -   Run tests:
 
     ```bash
-    lerna run test --stream --scope=backend
-    lerna run cy:chrome --stream --scope=frontend -- --component
+    npx lerna run test --stream --scope=backend
+    npx lerna run cy:chrome --stream --scope=frontend -- --component
 
     # Need to run the app before end to end test
-    lerna run dev --stream --scope=frontend --scope=backend -- --mode test
-    lerna run cy:chrome --stream --scope=frontend -- --e2e
+    npx lerna run dev --stream --scope=frontend --scope=backend -- --mode test
+    npx lerna run cy:chrome --stream --scope=frontend -- --e2e
     ```
 
 ## Deployment
@@ -78,7 +78,7 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 1. **Build**:
 
     ```bash
-    lerna run build --stream --scope=frontend --scope=backend
+    npx lerna run build --stream --scope=frontend --scope=backend
     ```
 
 2. **Deploy**:

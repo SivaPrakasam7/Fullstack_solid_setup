@@ -27,7 +27,7 @@ fi
 # Drop and recreate the database, then import the structure
 mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS fullstack"
 
-lerna run migrate --stream --scope=backend
+npx lerna run migrate --stream --scope=backend
 
 # Remove files in logs if the logs directory exists and is not empty
 if [ -d "packages/backend/logs" ] && [ "$(ls -A packages/backend/logs)" ]; then

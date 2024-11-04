@@ -1,2 +1,2 @@
 npm install
-lerna run migrate --stream --scope=backend
+npx lerna run migrate --stream --scope=backend
