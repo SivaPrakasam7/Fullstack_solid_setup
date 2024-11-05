@@ -21,14 +21,14 @@
                 :name="name"
                 :data-testId="name"
                 :class="[
-                    'w-full rounded-xl outline-none bg-white',
+                    'w-full rounded-xl outline-none bg-transparent',
                     size || 'p-3 text-md',
                     disabled
                         ? 'bg-gray-400 text-gray-400 dark:text-gray-300'
                         : '',
                     handleInput
                         ? '!text-default'
-                        : 'text-gray-500 text-sm py-3.5',
+                        : 'text-gray-400 text-sm py-3.5',
                 ]"
                 :disabled="disabled"
                 :multiple="multiple"
