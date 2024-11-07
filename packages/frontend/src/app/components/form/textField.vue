@@ -36,11 +36,13 @@
                     'text-md w-full rounded-xl outline-none bg-transparent',
                     size,
                 ]"
+                autocomplete="off"
                 @input="limitInput($event)"
                 @keypress="filterNumericInput"
                 @paste="filterPaste"
                 @focus="focus"
                 @blur="blur"
+                @click="toggleMenu()"
             />
             <textarea
                 v-if="type === 'textarea'"
@@ -57,7 +59,8 @@
             />
             <button
                 v-if="type === 'password'"
-                class="mr-4"
+                type="button"
+                class="mr-3"
                 oncontextmenu="return false;"
                 @click="toggle()"
             >
@@ -72,7 +75,48 @@
                     class="h-6 w-6"
                 ></SvgIcon>
             </button>
+            <button
+                v-if="type === 'autocomplete'"
+                type="button"
+                class="mr-3"
+                oncontextmenu="return false;"
+                @click="toggleMenu()"
+            >
+                <SvgIcon
+                    path="/icons/svg/arrow.svg"
+                    :class="[
+                        'h-5 w-5 transition-transform duration-300',
+                        showMenu ? 'rotate-180' : '',
+                    ]"
+                ></SvgIcon>
+                <!-- <SvgIcon
+                    v-else
+                    path="/icons/svg/close.svg"
+                    class="h-5 w-5"
+                ></SvgIcon> -->
+            </button>
             <slot name="endIcon" />
+            <ul
+                v-if="type === 'autocomplete'"
+                v-show="showMenu"
+                class="absolute bg-white dark:bg-black border border-gray-300 shadow-[0_0_5px_#00000050] dark:shadow-[#ffffff] rounded-lg w-full max-h-48 h-fit overflow-auto z-10 top-[100%]"
+            >
+                <li
+                    v-for="option in filterOptions"
+                    :key="option"
+                    class="app-button !border-none !rounded-none !justify-start !w-full"
+                    @click="selectOption(option)"
+                >
+                    {{ option }}
+                </li>
+                <li
+                    v-if="filterOptions.length === 0"
+                    class="app-button !border-none !rounded-none !justify-start !w-full"
+                    @click="selectOption(handleInput as string)"
+                >
+                    Add New Option
+                </li>
+            </ul>
         </div>
         <p
             :data-testId="`${name}-error`"
@@ -121,7 +165,7 @@ export default {
         },
         value: {
             default: '',
-            type: String,
+            type: [String, Number],
         },
         error: {
             default: '',
@@ -163,6 +207,10 @@ export default {
             default: '',
             type: String,
         },
+        options: {
+            required: true,
+            type: Array as PropType<string[]>,
+        },
     },
     emits: ['onchange'],
     data() {
@@ -170,22 +218,55 @@ export default {
             handleInput: this.value,
             show:
                 ['date', 'datetime-local', 'time'].includes(this.type) || false,
+            showMenu: false,
+            selectedOption: '',
         };
+    },
+    computed: {
+        filterOptions() {
+            return this.options.filter((option) =>
+                option
+                    .toLowerCase()
+                    .includes(`${this.handleInput}`.toLowerCase())
+            );
+        },
     },
     watch: {
         handleInput(value) {
-            this.$emit('onchange', {
-                name: this.name,
-                value,
-            });
+            if (this.type !== 'autocomplete') {
+                this.$emit('onchange', {
+                    name: this.name,
+                    value,
+                });
+            }
         },
         value(propsValue) {
             this.handleInput = propsValue;
         },
     },
+    created() {
+        document.removeEventListener('click', this.handleOutsideClick);
+    },
     methods: {
         toggle() {
             this.show = !this.show;
+        },
+        toggleMenu() {
+            if (this.type === 'autocomplete') {
+                this.showMenu = !this.showMenu;
+                if (this.showMenu)
+                    setTimeout(() => {
+                        document.addEventListener(
+                            'click',
+                            this.handleOutsideClick
+                        );
+                    }, 100);
+                else
+                    document.removeEventListener(
+                        'click',
+                        this.handleOutsideClick
+                    );
+            }
         },
         limitInput(event: Event) {
             const target = event.target as HTMLInputElement;
@@ -213,10 +294,10 @@ export default {
                 }
             }
         },
-        getTagValues(v: string) {
+        getTagValues(v: string | number) {
             return [
                 ...new Set(
-                    v
+                    `${v}`
                         .split(/( |;|,)/g)
                         .filter((t) => !!t.replaceAll(/(\s|;|,)/g, '').trim())
                 ),
@@ -230,6 +311,17 @@ export default {
             if (['date', 'datetime-local', 'time'].includes(this.type))
                 this.show = true;
         },
+        selectOption(value: string) {
+            this.$emit('onchange', { name: this.name, value });
+            this.showMenu = false;
+            document.removeEventListener('click', this.handleOutsideClick);
+        },
+        handleOutsideClick() {
+            if (this.showMenu) {
+                this.showMenu = false;
+                document.removeEventListener('click', this.handleOutsideClick);
+            }
+        },
     },
 };
 
@@ -241,5 +333,6 @@ export type IFieldType =
     | 'time'
     | 'datetime-local'
     | 'password'
-    | 'tag';
+    | 'tag'
+    | 'autocomplete';
 </script>

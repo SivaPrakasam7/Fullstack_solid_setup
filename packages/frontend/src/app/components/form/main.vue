@@ -1,5 +1,8 @@
 <template>
-    <div :class="['grid gap-2 p-2 w-full', layoutClass]">
+    <form
+        :class="['grid gap-2 p-2 w-full', layoutClass]"
+        @submit.prevent="onSubmit"
+    >
         <div
             v-for="[fieldName, field] in Object.entries(data || {}).filter(
                 ([_, field]) => !field.ref
@@ -7,28 +10,8 @@
             :key="fieldName"
             :class="field.alignClass"
         >
-            <SelectField
-                v-if="field.type === 'select'"
-                :name="fieldName"
-                :label="field.label"
-                :value="field.value"
-                :error="field.error"
-                :required="field.required"
-                :place-holder="field.placeHolder"
-                :size="field.size"
-                :disabled="field.disabled || loading"
-                :class="field.class"
-                :layout-class="field.layoutClass"
-                :options="field.options || []"
-                @onchange="onFieldChange"
-                ><template #startIcon>
-                    <slot :name="`${fieldName}StartIcon`" />
-                </template>
-                <template #endIcon>
-                    <slot :name="`${fieldName}EndIcon`" /> </template
-            ></SelectField>
             <FileUpload
-                v-else-if="field.type === 'file'"
+                v-if="field.type === 'file'"
                 :name="fieldName"
                 :label="field.label"
                 :value="field.value"
@@ -51,6 +34,7 @@
                 :name="fieldName"
                 :label="field.label"
                 :value="field.value"
+                :options="field.options || []"
                 :error="field.error"
                 :required="field.required"
                 :place-holder="field.placeHolder"
@@ -80,7 +64,6 @@
             data-testId="SUBMIT"
             :class="['app-button', loading ? 'text-gray-400' : '', buttonClass]"
             oncontextmenu="return false;"
-            @click="onSubmit"
         >
             <span :hidden="!loading">
                 <svg
@@ -102,7 +85,7 @@
             </span>
             {{ buttonText }}
         </button>
-    </div>
+    </form>
 </template>
 
 <script lang="ts">
@@ -110,13 +93,12 @@ import { PropType } from 'vue';
 
 //
 import FileUpload from './fileUpload.vue';
-import SelectField from './selectField.vue';
 import TextField from './textField.vue';
 
 //
 export default {
     name: 'FormBuilder',
-    components: { FileUpload, SelectField, TextField },
+    components: { FileUpload, TextField },
     props: {
         form: {
             required: true,
@@ -200,7 +182,7 @@ export default {
                           ).length
                     : typeof value === 'object'
                       ? !value.length
-                      : !value.trim())
+                      : !`${value}`.trim())
             ) {
                 errorMessage =
                     fieldData.requiredLabel ||
@@ -270,13 +252,13 @@ export interface IFormField {
         | 'text'
         | 'textarea'
         | 'number'
-        | 'select'
         | 'date'
         | 'time'
         | 'datetime-local'
         | 'file'
         | 'tag'
-        | 'password';
+        | 'password'
+        | 'autocomplete';
     placeHolder?: string;
     rows?: string;
     alignClass?: string;
