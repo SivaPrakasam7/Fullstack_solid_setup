@@ -120,7 +120,7 @@ jobs:
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:chrome -- --component
+              run: npm run cy:run -- --component --browser chrome
 
             - name: Archive production artifacts
               if: failure()
@@ -176,7 +176,7 @@ jobs:
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:chrome -- --e2e
+              run: npm run cy:run -- --e2e --browser chrome
 
             - name: Archive production artifacts
               if: failure()
@@ -232,7 +232,7 @@ jobs:
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:chrome -- --e2e
+              run: npm run cy:run -- --e2e --browser chrome
 
             - name: Archive production artifacts
               if: failure()

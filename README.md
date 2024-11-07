@@ -67,11 +67,11 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
     ```bash
     npx lerna run test --stream --scope=backend
-    npx lerna run cy:chrome --stream --scope=frontend -- --component
+    npx lerna run cy:run --stream --scope=frontend -- --component --browser chrome
 
     # Need to run the app before end to end test
     npx lerna run dev --stream --scope=frontend --scope=backend -- --mode test
-    npx lerna run cy:chrome --stream --scope=frontend -- --e2e
+    npx lerna run cy:run --stream --scope=frontend -- --e2e --browser chrome
     ```
 
 ## Deployment
