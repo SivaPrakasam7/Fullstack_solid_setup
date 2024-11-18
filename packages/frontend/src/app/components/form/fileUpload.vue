@@ -104,7 +104,7 @@ import type { PropType } from 'vue';
 
 //
 import DialogView from '../dialog.vue';
-import Cropper from './cropper.vue';
+import Cropper from '../cropper.vue';
 
 //
 export default {
