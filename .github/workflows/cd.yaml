@@ -1,0 +1,95 @@
+name: MetaPyra Production CD
+
+on:
+  push:
+    branches: [production]
+    paths: ['packages/frontend/**', 'packages/backend/**']
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.head_commit.modified && contains(github.event.head_commit.modified, 'packages/backend/') }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.14.0'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        working-directory: packages/backend
+        run: npm ci
+
+      - name: Build backend
+        working-directory: packages/backend
+        run: |
+          echo "${{ secrets.PRODUCTION_BACKEND_ENV }}" > .env
+          npm run build
+
+      - name: Upload to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USERNAME }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PROD_SSH_PORT }}
+          source: 'packages/backend/dist/'
+          target: ${{ secrets.PROD_REMOTE_DIRECTORY_PATH }}
+          rm: true
+          strip_components: 3
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.head_commit.modified && contains(github.event.head_commit.modified, 'packages/frontend/') }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.14.0'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        working-directory: packages/frontend
+        run: npm ci
+
+      - name: Build Frontend
+        working-directory: packages/frontend
+        run: |
+          echo "${{ secrets.PRODUCTION_FRONTEND_ENV }}" > .env
+          npm run build
+
+      - name: Upload to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USERNAME }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PROD_SSH_PORT }}
+          source: 'packages/frontend/dist/'
+          target: ${{ secrets.PROD_REMOTE_DIRECTORY_PATH }}
+          rm: true
+          strip_components: 3

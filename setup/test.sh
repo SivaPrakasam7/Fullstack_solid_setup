@@ -1,3 +1,5 @@
+#!/bin/bash
+
 npx lerna run test --stream --scope=backend
 killall -9 node
 npx lerna run cy:run --stream --scope=frontend -- --component --browser chrome

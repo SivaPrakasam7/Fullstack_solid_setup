@@ -149,7 +149,6 @@ The workflow includes four jobs:
     - **MySQL Service**: Sets up a MySQL service for the backend tests.
     - **Backend Setup**: Installs dependencies, sets up the backend environment using environment variables, and runs database migrations.
     - **Jest Test**: Runs Jest tests for the backend.
-    - **Test Result Upload**: If any tests fail, the results are uploaded as a summary.
 
 3. **Cypress Component Test**:
 
@@ -159,11 +158,25 @@ The workflow includes four jobs:
     - **Upload Test Artifacts**: If any tests fail, artifacts such as screenshots are uploaded for further investigation.
 
 4. **Cypress E2E Desktop/Mobile**:
+
     - **MySQL Service**: Sets up a MySQL service for the E2E tests.
     - **Frontend and Backend Setup**: Installs dependencies and sets up both the frontend and backend environments using environment variables. Also runs backend migrations.
     - **Run Services**: Uses `lerna` to start both the frontend and backend services.
     - **Cypress E2E Testing**: Runs Cypress E2E tests against the running frontend and backend services.
     - **Upload Test Artifacts**: If any tests fail, artifacts like screenshots are uploaded for review.
+
+5. **Deployment CD**:
+
+    - **Backend Deployment**:
+        - **Environment Setup**: Installs dependencies and configures the backend environment using `.env` variables.
+        - **Build and Deploy**: Builds the backend using `npm run build` in the `packages/backend` directory and deploys the built files to the production server using `scp`.
+
+    - **Frontend Deployment**:
+        - **Environment Setup**: Installs dependencies and configures the frontend environment using `.env` variables.
+        - **Build and Deploy**: Builds the frontend using `npm run build` in the `packages/frontend` directory and deploys the built files to the production server using `scp`.
+
+    - **Selective Deployment**: The workflow is triggered for the `master` branch, deploying only the changed parts (frontend or backend) based on file paths.
+
 
 This workflow ensures that every code change passes linting, code duplication checks, and comprehensive testing (unit, component, and E2E) before merging into the `master` branch.
 
