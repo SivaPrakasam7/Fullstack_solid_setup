@@ -168,15 +168,16 @@ The workflow includes four jobs:
 5. **Deployment CD**:
 
     - **Backend Deployment**:
+
         - **Environment Setup**: Installs dependencies and configures the backend environment using `.env` variables.
         - **Build and Deploy**: Builds the backend using `npm run build` in the `packages/backend` directory and deploys the built files to the production server using `scp`.
 
     - **Frontend Deployment**:
+
         - **Environment Setup**: Installs dependencies and configures the frontend environment using `.env` variables.
         - **Build and Deploy**: Builds the frontend using `npm run build` in the `packages/frontend` directory and deploys the built files to the production server using `scp`.
 
     - **Selective Deployment**: The workflow is triggered for the `master` branch, deploying only the changed parts (frontend or backend) based on file paths.
-
 
 This workflow ensures that every code change passes linting, code duplication checks, and comprehensive testing (unit, component, and E2E) before merging into the `master` branch.
 

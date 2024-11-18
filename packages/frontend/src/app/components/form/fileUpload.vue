@@ -12,6 +12,7 @@
             @change="loadFile"
         />
         <label
+            v-if="label"
             :for="name"
             class="block mb-1 text-sm font-bold text-gray-600 dark:text-white"
             >{{ label
@@ -39,8 +40,7 @@
             >
                 <slot name="uploadIcon" />
                 <p class="text-sm text-gray-400 text-center">
-                    Drag & Drop to upload<br /><span
-                        class="text-themeColorAlternate"
+                    Drag & Drop<br /><span class="text-themeColorAlternate"
                         >or browse</span
                     >
                 </p>
@@ -50,6 +50,7 @@
                     v-for="(image, index) in files"
                     :key="index"
                     :data-title="image.name"
+                    data-testId="SELECTED_FILE"
                     :class="[
                         'float-left m-1 relative border border-gray-300 rounded-lg',
                         imageSize,
@@ -67,6 +68,7 @@
                     />
                     <button
                         aria-label="close-information"
+                        data-testId="REMOVE_FILE"
                         type="button"
                         class="text-gray-400 app-button border border-blue-200 !rounded-full !p-0 text-sm !w-6 !h-6 flex justify-center items-center absolute -top-2 -right-2 z-50"
                         oncontextmenu="return false;"
@@ -80,20 +82,34 @@
         <p
             :data-testId="`${name}-error`"
             :class="[
-                'mt-1 text-xs italic',
+                'mt-1 text-xs italic min-h-4',
                 error || localError ? 'text-red-500' : 'text-gray-400',
             ]"
         >
             {{ localError || error || helperText }}
         </p>
+        <DialogView v-if="cropper" :open="showCropper" :hide="true">
+            <Cropper
+                :image="localFile"
+                :close="toggleCropper"
+                :callback="callback"
+            />
+        </DialogView>
     </div>
 </template>
 
 <script lang="ts">
+//
 import type { PropType } from 'vue';
 
+//
+import DialogView from '../dialog.vue';
+import Cropper from './cropper.vue';
+
+//
 export default {
     name: 'FileUpload',
+    components: { DialogView, Cropper },
     props: {
         name: {
             required: true,
@@ -151,6 +167,14 @@ export default {
             default: '',
             type: String,
         },
+        fileSize: {
+            default: 52428800,
+            type: Number,
+        },
+        cropper: {
+            default: false,
+            type: Boolean,
+        },
     },
     emits: ['onchange'],
     data() {
@@ -158,6 +182,9 @@ export default {
             files: this.value,
             isDragging: false,
             localError: '',
+            showCropper: false,
+            localFile: '',
+            selectedFile: null as null | File,
         };
     },
     watch: {
@@ -194,11 +221,21 @@ export default {
                             this.accept.replace(/,\s?/g, '|')
                         );
                         if (acceptFileRegex.test(file.type || '')) {
-                            this.files.push(file);
-                            this.$emit('onchange', {
-                                name: this.name,
-                                value: this.files,
-                            });
+                            if (file.size > this.fileSize)
+                                this.localError = `Upload limit maximum ${this.byteFormat(this.fileSize, 0)} allowed`;
+                            else {
+                                if (this.cropper) {
+                                    this.localFile = this.getObjectURL(file);
+                                    this.selectedFile = file;
+                                    this.showCropper = true;
+                                } else {
+                                    this.files.push(file);
+                                    this.$emit('onchange', {
+                                        name: this.name,
+                                        value: this.files,
+                                    });
+                                }
+                            }
                         } else {
                             this.localError = `${file.name} file format is invalid`;
                         }
@@ -216,6 +253,46 @@ export default {
         removeLocalImages(index: number) {
             this.files = this.files.filter((_, i) => i !== index);
             this.$emit('onchange', { name: this.name, value: this.files });
+        },
+        toggleCropper() {
+            this.showCropper = !this.showCropper;
+            if (!this.showCropper) {
+                this.localFile = '';
+                this.selectedFile = null;
+            }
+        },
+        callback(image: Blob) {
+            this.showCropper = false;
+            const file = new File([image], this.selectedFile!.name, {
+                type: 'image/png',
+            });
+            this.selectedFile = file;
+            this.files.push(file);
+            this.$emit('onchange', {
+                name: this.name,
+                value: this.files,
+            });
+        },
+        byteFormat(bytes: number, decimals: number) {
+            if (!+bytes) return '0 Bytes';
+
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = [
+                'Bytes',
+                'KB',
+                'MB',
+                'GB',
+                'TB',
+                'PB',
+                'EB',
+                'ZB',
+                'YB',
+            ];
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
         },
     },
 };

@@ -29,10 +29,11 @@
 //
 import { login } from 'src/repository/authentication';
 import { emailRegex } from 'src/constants/regex';
+import { store } from 'src/store';
+import { IFormField } from 'src/app/components/form/form.types';
 
 //
-import FormBuilder, { IFormField } from 'src/app/components/form/main.vue';
-import { store } from 'src/store';
+import FormBuilder from 'src/app/components/form/main.vue';
 
 //
 export default {

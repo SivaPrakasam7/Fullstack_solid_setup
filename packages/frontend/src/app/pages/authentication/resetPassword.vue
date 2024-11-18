@@ -18,9 +18,10 @@
 //
 import { changePassword } from 'src/repository/authentication';
 import { passwordRegex } from 'src/constants/regex';
+import { IFormField } from 'src/app/components/form/form.types';
 
 //
-import FormBuilder, { IFormField } from 'src/app/components/form/main.vue';
+import FormBuilder from 'src/app/components/form/main.vue';
 
 export default {
     name: 'SignInPage',
