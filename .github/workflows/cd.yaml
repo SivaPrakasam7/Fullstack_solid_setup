@@ -1,4 +1,4 @@
-name: MetaPyra Production CD
+name: Production deployment CD
 
 on:
   push:
