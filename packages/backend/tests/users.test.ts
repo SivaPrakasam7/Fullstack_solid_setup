@@ -10,10 +10,10 @@ describe('Users API', () => {
 
     beforeAll(async () => {
         nodemailerMock.mock.reset();
-        executeQuery('DELETE FROM users');
-        executeQuery('DELETE FROM verifications');
-        executeQuery('ALTER TABLE users AUTO_INCREMENT = 1');
-        executeQuery('ALTER TABLE verifications AUTO_INCREMENT = 1');
+        await executeQuery('DELETE FROM users');
+        await executeQuery('DELETE FROM verifications');
+        await executeQuery('ALTER TABLE users AUTO_INCREMENT = 1');
+        await executeQuery('ALTER TABLE verifications AUTO_INCREMENT = 1');
     });
 
     afterAll(async () => {

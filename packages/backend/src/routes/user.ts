@@ -19,10 +19,11 @@ import {
     forgotPasswordValidation,
     loginValidation,
     resetPasswordValidation,
-} from 'src/validations/users';
+} from 'src/validations/user';
 
 const router = express.Router();
 
+// Create user API
 /**
  * @swagger
  * /v1/user/create:
@@ -99,6 +100,7 @@ router
     .route('/create')
     .post(validator(createUserValidation), createUserController);
 
+// User login API
 /**
  * @swagger
  * /v1/user/login:
@@ -171,6 +173,7 @@ router
 
 router.route('/login').post(validator(loginValidation), loginController);
 
+// Get user profile API
 /**
  * @swagger
  * /v1/user/profile:
@@ -217,6 +220,7 @@ router.route('/profile').get(tokenChecker, userController);
 
 router.route('/request-verification').get(requestVerifyController);
 
+// Email verification API
 /**
  * @swagger
  * /v1/user/verify:
@@ -257,6 +261,7 @@ router.route('/request-verification').get(requestVerifyController);
 
 router.route('/verify').get(headerTokenChecker, verifyController);
 
+// Generate reset password link API
 /**
  * @swagger
  * /v1/user/request-reset-password:
@@ -303,6 +308,7 @@ router
     .route('/request-reset-password')
     .post(validator(forgotPasswordValidation), forgotPasswordController);
 
+// Change password API
 /**
  * @swagger
  * /v1/user/change-password:
@@ -352,6 +358,7 @@ router
  *                       type: string
  *                       example: "New password cannot be the same as the old password"
  */
+
 router
     .route('/change-password')
     .post(

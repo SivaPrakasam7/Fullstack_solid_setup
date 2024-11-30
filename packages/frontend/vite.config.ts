@@ -8,7 +8,7 @@ import { svgIconsPlugin } from './plugins/vite-svg-plugin';
 export default defineConfig(({ mode }) => {
     return {
         server: {
-            port: 3008,
+            port: 3000,
         },
         plugins: [
             vue(),

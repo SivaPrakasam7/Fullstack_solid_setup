@@ -3,7 +3,7 @@ use `fullstack`;
 -- Users
 CREATE TABLE
     `users` (
-        `id` int (11) AUTO_INCREMENT,
+        `id` INT (11) AUTO_INCREMENT,
         `userId` VARCHAR(100) NOT NULL, -- Store generated userId 
         `email` VARCHAR(100), -- Email address its optional 
         `name` VARCHAR(250), -- Name of user
