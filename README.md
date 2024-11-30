@@ -207,7 +207,7 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 
         # Frontend
         location / {
-            proxy_pass http://localhost:3008/;
+            proxy_pass http://localhost:3000/;
             proxy_http_version 1.1;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
