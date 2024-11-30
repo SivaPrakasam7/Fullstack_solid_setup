@@ -1,19 +1,104 @@
 # Fullstack solid setup
 
+[![Lerna](https://img.shields.io/badge/Maintained%20with-Lerna-cc00ff.svg)](https://lerna.js.org/)
+[![Vite](https://img.shields.io/badge/Created%20with-Vite-ddbb00.svg)](https://vitejs.dev/)
+[![Vue](https://img.shields.io/badge/Developed%20with-Vue-42b883.svg)](https://vuejs.org/)
+[![Typescript](https://img.shields.io/badge/Support-Typescript-3178c6.svg)](https://vitejs.dev/)
+[![Cypress](https://img.shields.io/badge/Tested%20with-Cypress-007780.svg)](https://www.cypress.io/)
+[![Nginx](https://img.shields.io/badge/Deployed%20on-Nginx-00b140.svg)](https://nginx.org/en/download.html)
+[![Tailwind CSS](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-06b6d4.svg)](https://tailwindcss.com/)
+[![Prettier](https://img.shields.io/badge/Formatted%20with-Prettier-f7b93e.svg)](https://prettier.io/)
+[![ESLint](https://img.shields.io/badge/Linted%20with-ESLint-4b32c3.svg)](https://eslint.org/)
+[![Husky](https://img.shields.io/badge/Git%20hooks%20by-Husky-d36ac2.svg)](https://typicode.github.io/husky/#/)
+
+## Quick Working Preview
+
+### Setup and test command
+
+The project includes ready-to-use bash scripts to streamline setup, database management, and testing. These scripts simplify the process, but if you're using an unsupported OS, you can execute the commands manually as outlined in the script files.
+
+<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700"/>
+
+1. **Setup and Initialization**  
+   Run `init.sh` to install dependencies and set up the backend database migrations:
+
+    ```bash
+    ./init.sh
+    ```
+
+2. **Database Management**
+   Use `db.sh` to reset the database and apply migrations. Pass your MySQL credentials as arguments:
+
+    ```bash
+    ./db.sh -u <mysql_user> -p <mysql_password>
+    ```
+
+3. **Run Tests**
+   Execute all tests, including backend tests and Cypress E2E tests, using `test.sh`:
+
+    ```bash
+    ./test.sh
+    ```
+
+    This script will:
+    - Run backend tests.
+    - Start frontend and backend services.
+    - Execute Cypress component and E2E tests.
+
+| Script    | Purpose                                                                                      |
+| --------- | -------------------------------------------------------------------------------------------- |
+| `init.sh` | Installs dependencies and runs backend migrations.                                           |
+| `db.sh`   | Drops and recreates the database, applies migrations, and cleans up log/backups directories. |
+| `test.sh` | Runs backend tests, Cypress component tests, and E2E tests.                                  |
+
+### Cypress E2E Test Execution
+
+Below is a demonstration of the Cypress End-to-End (E2E) Test Execution, showcasing the authentication flow
+
+<img src="doc/authentication.gif" alt="Demo of Cypress E2E Testcase" width="700"/>
+
+## Table of Contents
+
+-   [Project Setup](#project-setup)
+-   [Technologies](#technologies)
+    -   [Frontend](#frontend)
+    -   [Backend](#backend)
+    -   [Database](#database)
+    -   [Additional Tools](#additional-tools)
+    -   [Testing and CI/CD](#testing-and-cicd)
+-   [Key Features](#key-features)
+-   [Code Architecture Flow Diagram](#code-architecture-flow-diagram)
+-   [Installation](#installation)
+-   [Development Workflow](#development-workflow)
+-   [Deployment](#deployment)
+-   [GitHub Actions Workflow](#github-actions-workflow)
+
 ## Project Setup
 
 This repository provides a **common project setup** for web apps using **Vue**, **Node.js**, and essential tools for frontend and backend development, testing, and automation.
 
 ## Technologies
 
+### Frontend
+
 -   **Vue**: Popular frontend framework for building user interfaces.
 -   **Vite**: Fast build tool for modern web development with support for hot module replacement.
 -   **TypeScript**: Superset of JavaScript providing static typing for better code quality.
 -   **Tailwind CSS**: Utility-first CSS framework for quickly styling components.
 -   **Service Worker**: Enables background tasks and improves performance in Progressive Web Apps (PWA).
+-   **Vite Plugins**: Added for optimizing PWA features and removing unnecessary test case IDs in production builds.
+
+### Backend
 
 -   **Node.js**: JavaScript runtime for building scalable backend services.
+-   **Error/Security Middlewares**: Handles error responses, security measures, and logs access/errors for auditing.
+-   **Swagger**: Used for API documentation, providing a user-friendly interface to explore and test API endpoints.
+
+### Database
+
 -   **MySQL**: Relational database used for storing and managing data.
+
+### Additional Tools
 
 -   **Lerna**: Monorepo tool to manage multiple projects and dependencies.
 -   **Prettier**: Code formatter that ensures consistent coding styles.
@@ -21,14 +106,19 @@ This repository provides a **common project setup** for web apps using **Vue**, 
 -   **JSCPD**: Tool for detecting duplicate code across the codebase.
 -   **Husky**: Git hooks tool used for running automated tasks such as code formatting with Prettier and linting with ESLint during pre-commit.
 
+### Testing and CI/CD
+
 -   **Cypress**: Component and End-to-End testing framework for frontend applications.
 -   **Jest**: Used in backend services for unit and integration testing.
 -   **GitHub Actions**: CI/CD tool used to automate code quality checks, run Cypress tests, and manage workflows for pull requests and pushes.
--   **Vite Plugins**: Added for optimizing PWA features and removing unnecessary test case IDs in production builds.
 
--   **Error/Security Middlewares**: Handles error responses, security measures, and logs access/errors for auditing.
+## Key Features
 
--   **Swagger**: Used for API documentation, providing a user-friendly interface to explore and test API endpoints.
+-   **Monorepo Architecture**: Efficiently manage frontend and backend within a single repository using Lerna.
+-   **Comprehensive Testing**: Includes unit, integration, component, and end-to-end tests with Jest and Cypress.
+-   **Performance Optimization**: Utilizes Vite for fast builds and Service Workers for PWA capabilities.
+-   **Automated Workflows**: GitHub Actions ensure code quality and testing on every pull request.
+-   **Seamless Deployment**: Easy deployment process with Nginx and PM2.
 
 ## Code Architecture Flow Diagram
 
@@ -180,13 +270,3 @@ The workflow includes four jobs:
     - **Selective Deployment**: The workflow is triggered for the `master` branch, deploying only the changed parts (frontend or backend) based on file paths.
 
 This workflow ensures that every code change passes linting, code duplication checks, and comprehensive testing (unit, component, and E2E) before merging into the `master` branch.
-
-## Quick Working Preview
-
-### Setup and test command
-
-<img src="doc/setup_and_test.gif" alt="Demo of Application Feature" width="700"/>
-
-### Cypress E2E testcase video
-
-<img src="doc/authentication.gif" alt="Demo of Application Feature" width="700"/>

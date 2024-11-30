@@ -178,7 +178,7 @@
         </button>
         <div
             v-show="loading"
-            class="bg-gray-100 absolute w-full h-full rounded-lg flex items-center justify-center"
+            class="bg-gray-100 bg-opacity-50 dark:bg-transparent absolute w-full h-full rounded-lg flex items-center justify-center"
         >
             <div class="dot-pulse"></div>
         </div>

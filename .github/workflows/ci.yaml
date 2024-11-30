@@ -232,7 +232,7 @@ jobs:
 
             - name: Cypress run
               working-directory: packages/frontend
-              run: npm run cy:run -- --e2e --browser chrome
+              run: npm run cy:run -- --e2e --browser chrome --env viewportWidth=360,viewportHeight=800
 
             - name: Archive production artifacts
               if: failure()
