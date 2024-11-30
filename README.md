@@ -1,4 +1,4 @@
-# Fullstack solid setup
+# Fullstack setup
 
 [![Lerna](https://img.shields.io/badge/Maintained%20with-Lerna-cc00ff.svg)](https://lerna.js.org/)
 [![Vite](https://img.shields.io/badge/Created%20with-Vite-ddbb00.svg)](https://vitejs.dev/)
