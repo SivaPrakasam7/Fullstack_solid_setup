@@ -41,6 +41,7 @@ The project includes ready-to-use bash scripts to streamline setup, database man
     ```
 
     This script will:
+
     - Run backend tests.
     - Start frontend and backend services.
     - Execute Cypress component and E2E tests.
