@@ -17,13 +17,13 @@
             <div
                 v-if="show"
                 :class="[
-                    'w-full h-auto rounded-2xl relative bg-default border',
+                    'w-full h-auto rounded-2xl relative bg-white dark:bg-black border',
                     contentClass,
                 ]"
             >
                 <button
                     v-if="!hideClose"
-                    class="text-gray-400 app-button border !rounded-full !p-0 text-sm !w-8 !h-8 flex justify-center items-center absolute -top-3 -right-3"
+                    class="text-gray-400 bg-white dark:bg-black app-button border !rounded-full !p-0 text-sm !w-8 !h-8 flex justify-center items-center absolute -top-3 -right-3"
                     oncontextmenu="return false;"
                     @click="closeDialog()"
                 >

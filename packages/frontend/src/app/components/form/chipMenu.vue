@@ -23,7 +23,7 @@
                         option !== value,
                     'border-green-500 text-green-500': option === value,
                 }"
-                class="rounded-full py-2 px-4 transition duration-300 ease-out border"
+                class="rounded-full py-2 px-4 transition duration-300 ease-out border capitalize"
                 oncontextmenu="return false;"
                 @click="handleInput(option)"
             >

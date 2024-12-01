@@ -29,7 +29,7 @@ export const register = (payload: {
             url: `v1/user/create`,
         },
         payload
-    ).then(async (res) => {
+    ).then((res) => {
         appStore.commit('setToast', {
             type: res.error ? 'error' : 'success',
             message: res.message,
@@ -44,7 +44,7 @@ export const requestResetPassword = (payload: { email: string }) =>
             url: `v1/user/request-reset-password`,
         },
         payload
-    ).then(async (res) => {
+    ).then((res) => {
         appStore.commit('setToast', {
             type: res.error ? 'error' : 'success',
             message: res.message,
@@ -62,7 +62,7 @@ export const changePassword = (payload: { password: string }, token: string) =>
         {
             Authorization: `Bearer ${token}`,
         }
-    ).then(async (res) => {
+    ).then((res) => {
         appStore.commit('setToast', {
             type: res.error ? 'error' : 'success',
             message: res.message,

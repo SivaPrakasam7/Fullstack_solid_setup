@@ -2,7 +2,6 @@
     <div class="w-full">
         <label
             v-if="name"
-            :for="name"
             class="block mb-1 text-sm font-bold text-gray-600 dark:text-white"
             >{{ label
             }}<span
@@ -140,20 +139,20 @@
                 v-if="['autocomplete', 'select'].includes(type)"
                 v-show="showMenu"
                 :data-testId="`${name}-menu`"
-                class="absolute bg-white dark:bg-black border border-gray-300 shadow-[0_0_5px_#00000050] dark:shadow-[#ffffff] rounded-lg w-full max-h-32 h-fit overflow-auto z-10 top-[100%]"
+                class="absolute bg-white dark:bg-black border border-gray-300 shadow-[0_0_5px_#00000050] dark:shadow-[#ffffff] rounded-lg w-full max-h-32 h-fit overflow-auto z-10 top-[100%] max-md:fixed max-md:left-[50%] max-md:top-[50%] max-md:-translate-x-[50%] max-md:-translate-y-[50%] max-md:max-w-sm max-sm:w-[90%]"
             >
                 <li
                     v-for="(option, index) in filterOptions"
                     :key="index"
                     :data-testId="option"
-                    class="app-button !bg-white !border-none !rounded-none !justify-start !w-full"
+                    class="app-button !border-none !rounded-none !justify-start !w-full capitalize"
                     @click="selectOption(option)"
                 >
                     {{ option }}
                 </li>
                 <li
                     v-if="filterOptions.length === 0"
-                    class="app-button !bg-white !border-none !rounded-none !justify-start !w-full"
+                    class="app-button !border-none !rounded-none !justify-start !w-full"
                     @click="selectOption('')"
                 >
                     No options found
@@ -178,7 +177,10 @@
             ><br v-if="type === 'tag'" />
             {{ error || helperText }}
         </p>
-        <div v-if="type === 'tag'" class="block">
+        <div
+            v-if="type === 'tag'"
+            class="block max-h-20 overflow-y-auto no-scrollbar"
+        >
             <p
                 v-for="tag in getTagValues(handleInput)"
                 :key="tag"
@@ -311,7 +313,7 @@ export default {
             this.handleInput = propsValue;
         },
     },
-    created() {
+    beforeUnmount() {
         document.removeEventListener('click', this.handleOutsideClick);
     },
     methods: {
@@ -323,6 +325,10 @@ export default {
                 this.showMenu = !this.showMenu;
                 if (this.showMenu)
                     setTimeout(() => {
+                        document.removeEventListener(
+                            'click',
+                            this.handleOutsideClick
+                        );
                         document.addEventListener(
                             'click',
                             this.handleOutsideClick
