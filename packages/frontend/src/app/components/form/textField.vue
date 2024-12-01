@@ -2,6 +2,7 @@
     <div class="w-full">
         <label
             v-if="name"
+            :for="name"
             class="block mb-1 text-sm font-bold text-gray-600 dark:text-white"
             >{{ label
             }}<span
