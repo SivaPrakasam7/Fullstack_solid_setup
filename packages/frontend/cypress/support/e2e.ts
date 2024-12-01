@@ -18,3 +18,27 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+import { slowCypressDown } from 'cypress-slow-down';
+
+slowCypressDown(200);
+
+Cypress.Commands.add('customSelect', (name, option, autoSelect = false) => {
+    if (autoSelect) cy.get(`[data-testId="${name}"]`).click();
+    else cy.get(`[data-testId="${name}-select"]`).click();
+    cy.get(`[data-testId="${name}-menu"]`)
+        .get(`[data-testId="${option}"]`)
+        .click({ force: true });
+});
+
+declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace Cypress {
+        interface Chainable {
+            customSelect(
+                name: string,
+                option: string,
+                autoSelect?: boolean
+            ): Chainable<void>;
+        }
+    }
+}
