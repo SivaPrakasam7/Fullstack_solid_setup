@@ -10,4 +10,5 @@ module.exports = {
     },
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
+    testSequencer: './test-sequencer.js',
 };

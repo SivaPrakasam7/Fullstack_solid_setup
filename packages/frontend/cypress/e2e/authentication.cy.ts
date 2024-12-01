@@ -186,9 +186,14 @@ describe('Authentication', () => {
             'include.text',
             'Password must contain at least one uppercase letter, one lower case, one number, one symbol(@$!%*?&#), and be at least 8 characters long'
         );
+        cy.get('[data-testId="confirmPassword"]').type(register.name.slice(3));
+        cy.get('[data-testId="confirmPassword-error"]').should(
+            'include.text',
+            'Password does not match'
+        );
 
         // valid data
-        cy.get('[data-testId="password"]').type(register.newPassword);
+        cy.get('[data-testId="password"]').clear().type(register.newPassword);
         cy.get('[data-testId="password-error"]').should('include.text', '');
         cy.get('[data-testId="confirmPassword"]')
             .clear()

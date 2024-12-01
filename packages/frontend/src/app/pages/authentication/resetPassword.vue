@@ -54,6 +54,16 @@ export default {
                     required: true,
                     value: '',
                     requiredLabel: 'Please enter confirmation password',
+                    validations: [
+                        {
+                            type: 'function',
+                            validate: (values, name) => {
+                                return values.password === values[name]
+                                    ? ''
+                                    : 'Password does not match';
+                            },
+                        },
+                    ],
                 },
             } as Record<string, IFormField>,
         };
